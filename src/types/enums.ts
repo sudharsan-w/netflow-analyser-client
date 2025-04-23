@@ -1,0 +1,6 @@
+export enum AppTabs {
+  FLOW_PAGE = "FLOW_PAGE",
+  USER_PAGE = "USER_PAGE",
+  ANALYTICS = "ANALYTICS",
+  ALERTS = "ALERTS",
+}
