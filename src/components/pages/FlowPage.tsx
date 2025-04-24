@@ -24,7 +24,7 @@ const FlowPage = ({ className }: Props): ReactNode => {
   const [page, setPage] = useState<number>(1);
   const [searchKey, setSearchKey] = useState<String>("");
   const [filters, setFilters] = useState<Filters>({});
-  const [dateFrom, setDateFrom] = useState<Date|null>(null);
+  const [dateFrom, setDateFrom] = useState<Date | null>(null);
   const [dateTo, setDateTo] = useState<Date | null>(null);
 
   const {
@@ -38,18 +38,22 @@ const FlowPage = ({ className }: Props): ReactNode => {
   } = useSelector((state: RootState) => state.fetchnetflow);
   const { value: fetchnetflow } = useSelector(
     (state: RootState) => state.fetchnetflow
-  );  
+  );
   useEffect(() => {
     dispatch(fetchNetflowThunk({}));
   }, []);
 
   useEffect(() => {
-    let tempFilters = { ...filters }
+    let tempFilters = { ...filters };
     if (tempFilters["src_country_code"]) {
-      tempFilters["src_country_code"] = tempFilters["src_country_code"].map(getIsoCodeFromCountryName)
+      tempFilters["src_country_code"] = tempFilters["src_country_code"].map(
+        getIsoCodeFromCountryName
+      );
     }
     if (tempFilters["dst_country_code"]) {
-      tempFilters["dst_country_code"] = tempFilters["dst_country_code"].map(getIsoCodeFromCountryName)
+      tempFilters["dst_country_code"] = tempFilters["dst_country_code"].map(
+        getIsoCodeFromCountryName
+      );
     }
     dispatch(
       setFetchNetflowSliceState({
@@ -62,13 +66,13 @@ const FlowPage = ({ className }: Props): ReactNode => {
             sort_by: sort.sortBy,
             sort_order: sort.sortOrder,
             search_key: searchKey,
-            date_from: dateFrom?dateFrom.toISOString().slice(0,10):null,
-            date_to: dateTo ? dateTo.toISOString().slice(0, 10) : null
+            date_from: dateFrom ? dateFrom.toISOString().slice(0, 10) : null,
+            date_to: dateTo ? dateTo.toISOString().slice(0, 10) : null,
           },
           body: {
             ...fetchnetflow.query.body,
-            filters: tempFilters
-          }
+            filters: tempFilters,
+          },
         },
       })
     );
@@ -82,10 +86,10 @@ const FlowPage = ({ className }: Props): ReactNode => {
         searchKey={searchKey}
         setSearchKey={setSearchKey}
         setFilters={setFilters}
-        setDateFrom={ setDateFrom}
-        setDateTo={ setDateTo}
-        dateTo={ dateTo}
-        dateFrom={ dateFrom}
+        setDateFrom={setDateFrom}
+        setDateTo={setDateTo}
+        dateTo={dateTo}
+        dateFrom={dateFrom}
         filters={filters}
       />
       <div className={``}>

@@ -12,6 +12,8 @@ import {
   fetchNetflowThunk,
   setFetchNetflowSliceState,
 } from "../../redux_store/features/fetchnetflowuser.ts";
+import { getIsoCodeFromCountryName } from "../../utils/country.ts";
+
 type Props = {
   className?: String;
 };
@@ -23,6 +25,7 @@ const UserPage = ({ className }: Props): ReactNode => {
   const [page, setPage] = useState<number>(1);
   const [searchKey, setSearchKey] = useState<String>("");
   const [dateFrom, setDateFrom] = useState<Date | null>(null);
+  const [filters, setFilters] = useState<Filters>({});
   const [dateTo, setDateTo] = useState<Date | null>(null);
 
   const {
@@ -43,6 +46,12 @@ const UserPage = ({ className }: Props): ReactNode => {
   }, []);
 
   useEffect(() => {
+    let tempFilters = { ...filters };
+    if (tempFilters["country_code"]) {
+      tempFilters["country_code"] = tempFilters["country_code"].map(
+        getIsoCodeFromCountryName
+      );
+    }
     dispatch(
       setFetchNetflowSliceState({
         ...fetchnetflowuser,
@@ -54,23 +63,29 @@ const UserPage = ({ className }: Props): ReactNode => {
             sort_by: sort.sortBy,
             sort_order: sort.sortOrder,
             search_key: searchKey,
-            date_from: dateFrom?dateFrom.toISOString().slice(0,10):null,
-            date_to: dateTo?dateTo.toISOString().slice(0,10):null
+            date_from: dateFrom ? dateFrom.toISOString().slice(0, 10) : null,
+            date_to: dateTo ? dateTo.toISOString().slice(0, 10) : null,
+          },
+          body: {
+            ...fetchnetflowuser.query.body,
+            filters: tempFilters,
           },
         },
       })
     );
     dispatch(fetchNetflowThunk({}));
-  }, [page, sort, searchKey, dateFrom, dateTo]);
+  }, [page, sort, searchKey, dateFrom, dateTo, filters]);
 
   return (
     <div className={`${className}`}>
       <UserPageSubNav
         className={`mb-6`}
         searchKey={searchKey}
+        setFilters={setFilters}
         setSearchKey={setSearchKey}
         setDateFrom={setDateFrom}
         setDateTo={setDateTo}
+        filters={filters}
         dateFrom={dateFrom}
         dateTo={dateTo}
       />

@@ -1,10 +1,16 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 import AppTabsNav from "./AppTabsNav";
 import SearchSVG from "../../assets/react/Search";
 import FilterFilledSVG from "../../assets/react/FilterFilled";
 import CustomDateFrom from "../misc/CustomDateFrom";
 import CustomDateTo from "../misc/CustomDateTo";
+import DynamicInputSearch from "../select/Select";
+import { RootState } from "../../redux_store/store";
+import { useSelector } from "react-redux";
+import { Filters } from "../../types/types";
+import { fetchUserCountryKeys } from "../../apiutils/netflow";
+import { getCountryName } from "../../utils/country";
 
 type Props = {
   className: String;
@@ -14,6 +20,8 @@ type Props = {
   setDateTo: React.Dispatch<React.SetStateAction<Date | null>>;
   dateTo: Date | null;
   dateFrom: Date | null;
+  setFilters: React.Dispatch<React.SetStateAction<Filters>>;
+  filters: Filters;
 };
 
 const UserPageSubNav = ({
@@ -23,9 +31,31 @@ const UserPageSubNav = ({
   setDateFrom,
   dateFrom,
   setDateTo,
-  dateTo
+  dateTo,
+  setFilters,
+  filters,
 }: Props): ReactNode => {
   const [showFilters, setShowFilters] = useState<boolean>(false);
+  const [userCountryKeys, setUserCountryKeys] = useState<string[]>([]);
+
+  const { token } = useSelector((state: RootState) => state.auth);
+
+  const handleFilters = (key: string) => {
+    return (selected: string[]) => {
+      let temp = { ...filters };
+      temp[key] = selected;
+      if (temp[key].length == 0) {
+        delete temp[key];
+      }
+      setFilters(temp);
+    };
+  };
+
+  useEffect(() => {
+    fetchUserCountryKeys(token ?? "")
+      .then((resp) => setUserCountryKeys(resp.data.map(getCountryName)))
+      .catch(console.log);
+  }, []);
 
   return (
     <div className={`flex justify-between mx-10 ${className}`}>
@@ -52,6 +82,17 @@ const UserPageSubNav = ({
             <div
               className={`z-50 right-0 absolute  shadow-lg bg-white p-4 w-1/4`}
             >
+              <div className={`mb-4`}>
+                <span className={`text-md font-bold mb-1`}>
+                  Country
+                </span>
+                <DynamicInputSearch
+                  placeholder="Country"
+                  allDataPossibleOptions={userCountryKeys}
+                  setHandler={handleFilters("country_code")}
+                  valueHandler={filters["country_code"] ?? []}
+                />
+              </div>
               <div className={`mb-2`}>
                 <span className={`text-md font-bold `}>Date</span>
                 <div className="mt-[12px] grid grid-cols-2 gap-x-[17.6px]">

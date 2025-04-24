@@ -81,3 +81,11 @@ export const fetchDstCountryKeys = async (token: string) => {
     },
   });
 };
+
+export const fetchUserCountryKeys = async (token: string) => {
+  return axios.get<string[]>(`${API_URL}/v1/get/user_country/keys`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
