@@ -16,7 +16,7 @@ const AppTabsNav = ({ className }: Props): ReactNode => {
             Object.keys(AppTabsMeta).map((key: AppTabs): ReactNode => {
                 let isChoosen = AppTabsMeta[key].route == location.pathname
                 return (
-                    <div className={`rounded-xl font-sans text-lg py-2 px-2 mr-4  cursor-pointer w-1/4 text-center
+                    <div className={`flex items-center justify-center rounded-2xl font-sans text-md py-2 px-2 mr-4 cursor-pointer w-1/4 text-center
                         ${isChoosen ? '' : 'hover:bg-ter-750 '}
                         ${isChoosen ? 'bg-pri-250 text-pri-1000' : 'text-txt-1000'}`}
                     onClick={()=>navigate(AppTabsMeta[key].route)}>

@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 import AppTabsNav from "./AppTabsNav";
 import DynamicInputSearch from "../select/Select.tsx";
@@ -14,9 +14,12 @@ import {
   fetchDstPortKeys,
   fetchSrcPortKeys,
   fetchProtocolKeys,
+  fetchSrcCountryKeys,
+  fetchDstCountryKeys
 } from "../../apiutils/netflow.ts";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux_store/store.ts";
+import { getCountryName } from "../../utils/country.ts";
 
 type Props = {
   className: String;
@@ -45,6 +48,8 @@ const FlowPageSubNav = ({
   const [protocolKeys, setProtocolKeys] = useState<string[]>([]);
   const [srcPortKeys, setSrcPortKeys] = useState<string[]>([]);
   const [dstPortKeys, setDstPortKeys] = useState<string[]>([]);
+  const [srcCountryKeys, setSrcCountryKeys] = useState<string[]>([]);
+  const [dstCountryKeys, setDstCountryKeys] = useState<string[]>([]);
 
   const { token } = useSelector((state: RootState) => state.auth);
 
@@ -68,6 +73,12 @@ const FlowPageSubNav = ({
       .catch(console.log);
     fetchDstPortKeys(token??"")
       .then((resp) => setDstPortKeys(resp.data))
+      .catch(console.log);
+    fetchSrcCountryKeys(token??"")
+      .then((resp) => setSrcCountryKeys(resp.data.map(getCountryName)))
+      .catch(console.log);
+    fetchDstCountryKeys(token??"")
+      .then((resp) => setDstCountryKeys(resp.data.map(getCountryName)))
       .catch(console.log);
   }, []);
 
@@ -94,7 +105,7 @@ const FlowPageSubNav = ({
           </div>
           {showFilters && (
             <div
-              className={`z-50 right-0 absolute  shadow-lg bg-white p-4 w-1/4`}
+              className={`z-50 right-0 absolute text-gray-700 shadow-lg bg-white p-4 w-1/4`}
             >
               <div className={`mb-4`}>
                 <span className={`text-md font-bold mb-1`}>Protocol</span>
@@ -119,10 +130,32 @@ const FlowPageSubNav = ({
                   Destination Port
                 </span>
                 <DynamicInputSearch
-                  placeholder="Source Port"
+                  placeholder="Dest Port"
                   allDataPossibleOptions={dstPortKeys}
                   setHandler={handleFilters("dst_port")}
                   valueHandler={filters["dst_port"] ?? []}
+                />
+              </div>
+              <div className={`mb-4`}>
+                <span className={`text-md font-bold mb-1`}>
+                  Source Country
+                </span>
+                <DynamicInputSearch
+                  placeholder="Source Country"
+                  allDataPossibleOptions={srcCountryKeys}
+                  setHandler={handleFilters("src_country_code")}
+                  valueHandler={filters["src_country_code"] ?? []}
+                />
+              </div>
+              <div className={`mb-4`}>
+                <span className={`text-md font-bold mb-1`}>
+                  Destination Country
+                </span>
+                <DynamicInputSearch
+                  placeholder="Destination Country"
+                  allDataPossibleOptions={dstCountryKeys}
+                  setHandler={handleFilters("dst_country_code")}
+                  valueHandler={filters["dst_country_code"] ?? []}
                 />
               </div>
               <div className={`mb-2`}>

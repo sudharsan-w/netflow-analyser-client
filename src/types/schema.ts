@@ -12,6 +12,7 @@ export const UserNetflowSchema = z.object({
   asn: z.string().optional(),
   geo_location: z.record(z.any()).optional(),
   schema_version: z.number(),
+  country_code: z.string().optional()
 });
 
 export const NetflowRecordSchema = z.object({
@@ -45,10 +46,12 @@ export const NetflowRecordSchema = z.object({
   src_known: z.boolean().optional(),
   src_malicious: z.boolean().optional(),
   src_malicious_source: z.record(z.any()).optional(),
+  src_country_code: z.string().optional(),
 
   dst_known: z.boolean().optional(),
   dst_malicious: z.boolean().optional(),
   dst_malicious_source: z.record(z.any()).optional(),
+  dst_country_code: z.string().optional(),
 });
 
 export type NetflowRecord = z.infer<typeof NetflowRecordSchema>;

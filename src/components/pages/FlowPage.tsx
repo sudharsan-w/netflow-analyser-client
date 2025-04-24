@@ -12,6 +12,7 @@ import {
   fetchNetflowThunk,
   setFetchNetflowSliceState,
 } from "../../redux_store/features/fetchnetflow.ts";
+import { getIsoCodeFromCountryName } from "../../utils/country.ts";
 type Props = {
   className?: String;
 };
@@ -43,6 +44,13 @@ const FlowPage = ({ className }: Props): ReactNode => {
   }, []);
 
   useEffect(() => {
+    let tempFilters = { ...filters }
+    if (tempFilters["src_country_code"]) {
+      tempFilters["src_country_code"] = tempFilters["src_country_code"].map(getIsoCodeFromCountryName)
+    }
+    if (tempFilters["dst_country_code"]) {
+      tempFilters["dst_country_code"] = tempFilters["dst_country_code"].map(getIsoCodeFromCountryName)
+    }
     dispatch(
       setFetchNetflowSliceState({
         ...fetchnetflow,
@@ -55,11 +63,11 @@ const FlowPage = ({ className }: Props): ReactNode => {
             sort_order: sort.sortOrder,
             search_key: searchKey,
             date_from: dateFrom?dateFrom.toISOString().slice(0,10):null,
-            date_to: dateTo?dateTo.toISOString().slice(0,10):null
+            date_to: dateTo ? dateTo.toISOString().slice(0, 10) : null
           },
           body: {
             ...fetchnetflow.query.body,
-            filters
+            filters: tempFilters
           }
         },
       })
