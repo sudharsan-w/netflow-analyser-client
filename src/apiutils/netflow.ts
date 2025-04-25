@@ -1,6 +1,8 @@
 import axios from "axios";
 
 import {
+  FetchNetflowAlertQuery,
+  FetchNetflowAlertResponse,
   FetchNetflowQuery,
   FetchNetflowResponse,
   FetchNetflowUserQuery,
@@ -32,6 +34,22 @@ export const fetNetflowUsers = async (
 ) => {
   return axios.post<FetchNetflowUserResponse>(
     `${API_URL}/v1/get/netflow_users`,
+    query.body.filters,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: query.params,
+    }
+  );
+};
+
+export const fetNetflowAlerts = async (
+  query: FetchNetflowAlertQuery,
+  token: string
+) => {
+  return axios.post<FetchNetflowAlertResponse>(
+    `${API_URL}/v1/get/netflow_alerts`,
     query.body.filters,
     {
       headers: {

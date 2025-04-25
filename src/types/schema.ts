@@ -12,7 +12,7 @@ export const UserNetflowSchema = z.object({
   asn: z.string().optional(),
   geo_location: z.record(z.any()).optional(),
   schema_version: z.number(),
-  country_code: z.string().optional()
+  country_code: z.string().optional(),
 });
 
 export const NetflowRecordSchema = z.object({
@@ -54,6 +54,37 @@ export const NetflowRecordSchema = z.object({
   dst_country_code: z.string().optional(),
 });
 
-export type NetflowRecord = z.infer<typeof NetflowRecordSchema>;
+const MaliciousSchema = z.object({
+  source: z.string(),
+  type_: z.string().nullable().optional(),
+  date: z.date().optional(),
+});
 
+export const NetflowAlertSchema = z.object({
+  src_ip: z.string(),
+  src_ip_version: z.string(),
+  src_port: z.string(),
+  src_asn: z.string(),
+  src_country_code: z.string().optional(),
+  src_malicious_meta: z.array(MaliciousSchema),
+
+  dst_ip: z.string(),
+  dst_ip_version: z.string(),
+  dst_port: z.string(),
+  dst_asn: z.string(),
+  dst_country_code: z.string().optional(),
+  dst_malicious_meta: z.array(MaliciousSchema),
+
+  connection_counts: z.number(),
+  total_flow_duration: z.number(),
+  first_seen: z.string(),
+  last_seen: z.string(),
+
+  mitigation_message: z.string().optional().default(""),
+  alerts: z.record(z.any()).optional(),
+});
+
+export type NetflowAlert = z.infer<typeof NetflowAlertSchema>;
+export type Malicious = z.infer<typeof MaliciousSchema>;
+export type NetflowRecord = z.infer<typeof NetflowRecordSchema>;
 export type UserNetflow = z.infer<typeof UserNetflowSchema>;

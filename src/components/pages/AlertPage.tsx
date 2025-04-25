@@ -1,31 +1,31 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import UserTable from "../tables/UserTable";
-import UserPageSubNav from "../nav/UserPageSubNav";
+// import FlowPageSubNav from "../nav/FlowPageSubNav";
 import BufferSVG from "../../assets/react/Buffer.tsx";
 import { Sort, Pagination, Filters } from "../../types/types";
 import PaginationComponent from "../pagination/Pagination";
 
 import { RootState, AppDispatch } from "../../redux_store/store";
-import {
-  fetchNetflowThunk,
-  setFetchNetflowSliceState,
-} from "../../redux_store/features/fetchnetflowuser.ts";
 import { getIsoCodeFromCountryName } from "../../utils/country.ts";
-
+import AlertTable from "../tables/AlertTable.tsx";
+import {
+  fetchNetflowAlertThunk,
+  setFetchNetflowAlertSliceState,
+} from "../../redux_store/features/fetchnetflowalerts.ts";
+import AlertPageSubNav from "../nav/AlertPageSubNav.tsx";
 type Props = {
   className?: String;
 };
 
-const UserPage = ({ className }: Props): ReactNode => {
+const AlertPage = ({ className }: Props): ReactNode => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [sort, setSort] = useState<Sort>({ sortBy: null, sortOrder: "desc" });
+  const [sort, setSort] = useState<Sort>({ sortBy: null, sortOrder: "asc" });
   const [page, setPage] = useState<number>(1);
   const [searchKey, setSearchKey] = useState<String>("");
-  const [dateFrom, setDateFrom] = useState<Date | null>(null);
   const [filters, setFilters] = useState<Filters>({});
+  const [dateFrom, setDateFrom] = useState<Date | null>(null);
   const [dateTo, setDateTo] = useState<Date | null>(null);
 
   const {
@@ -36,30 +36,35 @@ const UserPage = ({ className }: Props): ReactNode => {
       loading: fetchLoading,
       query: fetchQuery,
     },
-  } = useSelector((state: RootState) => state.fetchnetflowuser);
-  const { value: fetchnetflowuser } = useSelector(
-    (state: RootState) => state.fetchnetflowuser
+  } = useSelector((state: RootState) => state.fetchnetflowalert);
+  const { value: fetchnetflow } = useSelector(
+    (state: RootState) => state.fetchnetflowalert
   );
-
   useEffect(() => {
-    dispatch(fetchNetflowThunk({}));
+    dispatch(fetchNetflowAlertThunk({}));
   }, []);
 
   useEffect(() => {
     let tempFilters = { ...filters };
-    if (tempFilters["country_code"]) {
-      tempFilters["country_code"] = tempFilters["country_code"].map(
+    if (tempFilters["src_country_code"]) {
+      tempFilters["src_country_code"] = tempFilters["src_country_code"].map(
+        getIsoCodeFromCountryName
+      );
+    }
+    if (tempFilters["dst_country_code"]) {
+      tempFilters["dst_country_code"] = tempFilters["dst_country_code"].map(
         getIsoCodeFromCountryName
       );
     }
     dispatch(
-      setFetchNetflowSliceState({
-        ...fetchnetflowuser,
+      setFetchNetflowAlertSliceState({
+        ...fetchnetflow,
         query: {
-          ...fetchnetflowuser.query,
+          ...fetchnetflow.query,
           params: {
-            ...fetchnetflowuser.query.params,
+            ...fetchnetflow.query.params,
             page,
+            limit: 10,
             sort_by: sort.sortBy,
             sort_order: sort.sortOrder,
             search_key: searchKey,
@@ -67,27 +72,27 @@ const UserPage = ({ className }: Props): ReactNode => {
             date_to: dateTo ? dateTo.toISOString().slice(0, 10) : null,
           },
           body: {
-            ...fetchnetflowuser.query.body,
+            ...fetchnetflow.query.body,
             filters: tempFilters,
           },
         },
       })
     );
-    dispatch(fetchNetflowThunk({}));
-  }, [page, sort, searchKey, dateFrom, dateTo, filters]);
+    dispatch(fetchNetflowAlertThunk({}));
+  }, [page, sort, searchKey, filters, dateFrom, dateTo]);
 
   return (
     <div className={`${className}`}>
-      <UserPageSubNav
+      <AlertPageSubNav
         className={`mb-6`}
         searchKey={searchKey}
-        setFilters={setFilters}
         setSearchKey={setSearchKey}
+        setFilters={setFilters}
         setDateFrom={setDateFrom}
         setDateTo={setDateTo}
-        filters={filters}
-        dateFrom={dateFrom}
         dateTo={dateTo}
+        dateFrom={dateFrom}
+        filters={filters}
       />
       <div className={``}>
         {fetchLoading ? (
@@ -97,7 +102,7 @@ const UserPage = ({ className }: Props): ReactNode => {
         )}
         {fetchSuccess && fetchData ? (
           <>
-            <UserTable
+            <AlertTable
               className={`px-10 mb-8`}
               sort={sort}
               setSort={setSort}
@@ -117,4 +122,4 @@ const UserPage = ({ className }: Props): ReactNode => {
   );
 };
 
-export default UserPage;
+export default AlertPage;

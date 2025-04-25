@@ -58,6 +58,31 @@ export type FetchNetflowUserResponse = {
   data: Array<schema.UserNetflow>;
 };
 
+export type FetchNetflowAlertQuery = {
+  params: {
+    page: number;
+    limit: number;
+    search_key: string | null;
+    date_from: string | null;
+    date_to: string | null;
+    sort_by: string | null;
+    sort_order: SortOrder;
+  };
+  body: {
+    filters: Filters;
+  };
+};
+
+export type FetchNetflowAlertResponse = {
+  page_no: number;
+  skip: number;
+  limit: number;
+  pages_till: number;
+  has_next_pages: boolean;
+  has_prev_pages: boolean;
+  data: Array<schema.NetflowAlert>;
+};
+
 export type Sort = {
   sortBy: String | null;
   sortOrder: SortOrder;

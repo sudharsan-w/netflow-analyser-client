@@ -9,6 +9,7 @@ import FlowPage from "../pages/FlowPage";
 import UserPage from "../pages/UserPage";
 import { LoginPage } from "../pages/LoginPage";
 import { validateTokenThunk } from "../../redux_store/features/auth";
+import AlertPage from "../pages/AlertPage";
 
 export default function () {
   const dispatch = useDispatch<AppDispatch>();
@@ -30,6 +31,7 @@ export default function () {
         <Route path={"/login"} element={!isAuthenticated ? <LoginPage /> : <Navigate to={ `/flows`} />} />
         <Route path={"/flows"} element={<FlowPage />} />
         <Route path={"/users"} element={<UserPage />} />
+        <Route path={"/alerts"} element={<AlertPage />} />
       </Routes>
     </>
   );
