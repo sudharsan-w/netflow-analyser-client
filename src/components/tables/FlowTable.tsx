@@ -139,7 +139,7 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
         </div>
         <div className="flex-[15] px-4 py-3  " ref={header11}>
           <div className="flex justify-start items-start text-sm">
-            <span className={``}>First Seen</span>
+            <span className={``}>Start Time {'(IST)'}</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
               onClick={handleSort("first_datetime")}
@@ -149,7 +149,7 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
         </div>
         <div className="flex-[15] px-4 py-3  " ref={header12}>
           <div className="flex justify-start items-start text-sm">
-            <span className={``}>Last Seen</span>
+            <span className={``}>End Time {'(IST)'}</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
               onClick={handleSort("last_datetime")}

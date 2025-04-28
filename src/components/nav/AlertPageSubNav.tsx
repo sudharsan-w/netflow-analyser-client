@@ -15,7 +15,9 @@ import {
   fetchSrcPortKeys,
   fetchProtocolKeys,
   fetchSrcCountryKeys,
-  fetchDstCountryKeys
+  fetchDstCountryKeys,
+  fetchSrcAsnKeys,
+  fetchDstAsnKeys,
 } from "../../apiutils/netflow.ts";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux_store/store.ts";
@@ -50,6 +52,8 @@ const AlertPageSubNav = ({
   const [dstPortKeys, setDstPortKeys] = useState<string[]>([]);
   const [srcCountryKeys, setSrcCountryKeys] = useState<string[]>([]);
   const [dstCountryKeys, setDstCountryKeys] = useState<string[]>([]);
+  const [srcAsnKeys, setSrcAsnKeys] = useState<string[]>([]);
+  const [dstAsnKeys, setDstAsnKeys] = useState<string[]>([]);
 
   const { token } = useSelector((state: RootState) => state.auth);
 
@@ -65,20 +69,26 @@ const AlertPageSubNav = ({
   };
 
   useEffect(() => {
-    fetchProtocolKeys(token??"")
+    fetchProtocolKeys(token ?? "")
       .then((resp) => setProtocolKeys(resp.data))
       .catch(console.log);
-    fetchSrcPortKeys(token??"")
+    fetchSrcPortKeys(token ?? "")
       .then((resp) => setSrcPortKeys(resp.data))
       .catch(console.log);
-    fetchDstPortKeys(token??"")
+    fetchDstPortKeys(token ?? "")
       .then((resp) => setDstPortKeys(resp.data))
       .catch(console.log);
-    fetchSrcCountryKeys(token??"")
+    fetchSrcCountryKeys(token ?? "")
       .then((resp) => setSrcCountryKeys(resp.data.map(getCountryName)))
       .catch(console.log);
-    fetchDstCountryKeys(token??"")
+    fetchDstCountryKeys(token ?? "")
       .then((resp) => setDstCountryKeys(resp.data.map(getCountryName)))
+      .catch(console.log);
+    fetchDstAsnKeys(token ?? "")
+      .then((resp) => setDstAsnKeys(resp.data))
+      .catch(console.log);
+    fetchSrcAsnKeys(token ?? "")
+      .then((resp) => setSrcAsnKeys(resp.data))
       .catch(console.log);
   }, []);
 
@@ -117,6 +127,24 @@ const AlertPageSubNav = ({
                 />
               </div> */}
               <div className={`mb-4`}>
+                <span className={`text-md font-bold mb-1`}>Source ASN</span>
+                <DynamicInputSearch
+                  placeholder="Source ASN"
+                  allDataPossibleOptions={srcAsnKeys}
+                  setHandler={handleFilters("src_asn")}
+                  valueHandler={filters["src_asn"] ?? []}
+                />
+              </div>
+              <div className={`mb-4`}>
+                <span className={`text-md font-bold mb-1`}>Destination ASN</span>
+                <DynamicInputSearch
+                  placeholder="Source ASN"
+                  allDataPossibleOptions={dstAsnKeys}
+                  setHandler={handleFilters("dst_asn")}
+                  valueHandler={filters["dst_asn"] ?? []}
+                />
+              </div>
+              <div className={`mb-4`}>
                 <span className={`text-md font-bold mb-1`}>Source Port</span>
                 <DynamicInputSearch
                   placeholder="Source Port"
@@ -137,9 +165,7 @@ const AlertPageSubNav = ({
                 />
               </div>
               <div className={`mb-4`}>
-                <span className={`text-md font-bold mb-1`}>
-                  Source Country
-                </span>
+                <span className={`text-md font-bold mb-1`}>Source Country</span>
                 <DynamicInputSearch
                   placeholder="Source Country"
                   allDataPossibleOptions={srcCountryKeys}

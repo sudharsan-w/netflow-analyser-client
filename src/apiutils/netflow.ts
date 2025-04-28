@@ -107,3 +107,27 @@ export const fetchUserCountryKeys = async (token: string) => {
     },
   });
 };
+
+export const fetchSrcAsnKeys = async (token: string) => {
+  return axios.get<string[]>(`${API_URL}/v1/get/src_asn/keys`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const fetchDstAsnKeys = async (token: string) => {
+  return axios.get<string[]>(`${API_URL}/v1/get/dst_asn/keys`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const fetchUserAsnKeys = async (token: string) => {
+  return axios.get<string[]>(`${API_URL}/v1/get/user_asn/keys`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

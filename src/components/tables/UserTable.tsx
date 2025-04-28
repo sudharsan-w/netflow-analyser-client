@@ -72,7 +72,7 @@ const UserTable = ({ className, setSort, sort, data }: Props): ReactNode => {
         </div>
         <div className="flex-[14] px-4 py-3" ref={header5}>
           <div className="flex justify-start items-start text-sm">
-            Last Connection Time
+            Last Connection Time {"(IST)"}
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
               onClick={handleSort("date_updated")}
@@ -138,10 +138,14 @@ const UserTable = ({ className, setSort, sort, data }: Props): ReactNode => {
                 </div>
               </TableRow>
               <TableRow referenceRef={header6} className={`inline-block  `}>
-                <div className="w-full truncate    py-4">{record.malicous_count}</div>
+                <div className="w-full truncate    py-4">
+                  {record.malicous_count}
+                </div>
               </TableRow>
               <TableRow referenceRef={header6} className={`inline-block  `}>
-                <div className="w-full truncate    py-4">{record.src_connection_count}</div>
+                <div className="w-full truncate    py-4">
+                  {record.src_connection_count}
+                </div>
               </TableRow>
             </div>
           );

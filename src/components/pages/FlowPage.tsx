@@ -20,7 +20,7 @@ type Props = {
 const FlowPage = ({ className }: Props): ReactNode => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [sort, setSort] = useState<Sort>({ sortBy: "first_datetime", sortOrder: "asc" });
+  const [sort, setSort] = useState<Sort>({ sortBy: "first_datetime", sortOrder: "desc" });
   const [page, setPage] = useState<number>(1);
   const [searchKey, setSearchKey] = useState<String>("");
   const [filters, setFilters] = useState<Filters>({});

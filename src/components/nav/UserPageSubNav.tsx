@@ -9,7 +9,7 @@ import DynamicInputSearch from "../select/Select";
 import { RootState } from "../../redux_store/store";
 import { useSelector } from "react-redux";
 import { Filters } from "../../types/types";
-import { fetchUserCountryKeys } from "../../apiutils/netflow";
+import { fetchUserAsnKeys, fetchUserCountryKeys } from "../../apiutils/netflow";
 import { getCountryName } from "../../utils/country";
 
 type Props = {
@@ -37,6 +37,8 @@ const UserPageSubNav = ({
 }: Props): ReactNode => {
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const [userCountryKeys, setUserCountryKeys] = useState<string[]>([]);
+  const [userAsnKeys, setUserAsnKeys] = useState<string[]>([]);
+
 
   const { token } = useSelector((state: RootState) => state.auth);
 
@@ -54,6 +56,9 @@ const UserPageSubNav = ({
   useEffect(() => {
     fetchUserCountryKeys(token ?? "")
       .then((resp) => setUserCountryKeys(resp.data.map(getCountryName)))
+      .catch(console.log);
+    fetchUserAsnKeys(token ?? "")
+      .then((resp) => setUserAsnKeys(resp.data))
       .catch(console.log);
   }, []);
 
@@ -83,14 +88,21 @@ const UserPageSubNav = ({
               className={`z-50 right-0 absolute  shadow-lg bg-white p-4 w-1/4`}
             >
               <div className={`mb-4`}>
-                <span className={`text-md font-bold mb-1`}>
-                  Country
-                </span>
+                <span className={`text-md font-bold mb-1`}>Country</span>
                 <DynamicInputSearch
                   placeholder="Country"
                   allDataPossibleOptions={userCountryKeys}
                   setHandler={handleFilters("country_code")}
                   valueHandler={filters["country_code"] ?? []}
+                />
+              </div>
+              <div className={`mb-4`}>
+                <span className={`text-md font-bold mb-1`}>ASN</span>
+                <DynamicInputSearch
+                  placeholder="ASN"
+                  allDataPossibleOptions={userAsnKeys}
+                  setHandler={handleFilters("asn")}
+                  valueHandler={filters["asn"] ?? []}
                 />
               </div>
               <div className={`mb-2`}>

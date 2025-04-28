@@ -21,7 +21,7 @@ type Props = {
 const UserPage = ({ className }: Props): ReactNode => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [sort, setSort] = useState<Sort>({ sortBy: null, sortOrder: "desc" });
+  const [sort, setSort] = useState<Sort>({ sortBy: "date_updated", sortOrder: "desc" });
   const [page, setPage] = useState<number>(1);
   const [searchKey, setSearchKey] = useState<String>("");
   const [dateFrom, setDateFrom] = useState<Date | null>(null);

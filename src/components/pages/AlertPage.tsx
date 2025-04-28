@@ -21,7 +21,7 @@ type Props = {
 const AlertPage = ({ className }: Props): ReactNode => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [sort, setSort] = useState<Sort>({ sortBy: null, sortOrder: "asc" });
+  const [sort, setSort] = useState<Sort>({ sortBy: "first_seen", sortOrder: "desc" });
   const [page, setPage] = useState<number>(1);
   const [searchKey, setSearchKey] = useState<String>("");
   const [filters, setFilters] = useState<Filters>({});

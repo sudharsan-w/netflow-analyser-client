@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 
 import SortSVG from "../../assets/react/Sort";
 import ArrowSVG from "../../assets/react/Arrow";
@@ -19,11 +19,11 @@ const ListCell = ({
   className,
   data,
 }: {
-  data: string[];
+  data: Array<string|null|undefined>;
   className?: string;
 }): ReactNode => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const itemRefs = useRef<(HTMLDivElement | undefined)[]>([]);
   const [visibleCount, setVisibleCount] = useState(data.length);
   const [showAll, setShowAll] = useState<boolean>(false);
 
@@ -34,14 +34,11 @@ const ListCell = ({
 
       const containerRight = container.getBoundingClientRect().right;
       let count = 0;
-      console.log("container ", containerRight);
-
       for (let i = 0; i < data.length; i++) {
         const el = itemRefs.current[i];
         if (!el) continue;
 
         const { right } = el.getBoundingClientRect();
-        console.log("element ", right);
         if (right < containerRight && el.checkVisibility()) {
           count++;
         } else {
@@ -92,7 +89,7 @@ const ListCell = ({
           ? data.map((item, index) => (
               <div
                 key={index}
-                ref={(el: HTMLDivElement | null) =>
+                ref={(el: HTMLDivElement | undefined) =>
                   (itemRefs.current[index] = el)
                 }
                 className={`px-2 py-1 ml-1 bg-pri-250 rounded-2xl text-sm ${
@@ -125,15 +122,6 @@ const ListCell = ({
     </div>
   );
 
-  return (
-    <div className={`flex w-full ${className}`}>
-      {data.map((txt: string) => (
-        <span className={`px-2 py-1 mr-1 bg-pri-250 rounded-2xl text-sm`}>
-          {txt}
-        </span>
-      ))}
-    </div>
-  );
 };
 
 const AlertTable = ({ className, setSort, sort, data }: Props): ReactNode => {
@@ -161,6 +149,12 @@ const AlertTable = ({ className, setSort, sort, data }: Props): ReactNode => {
   const header7 = useRef<HTMLDivElement>(null);
   const header8 = useRef<HTMLDivElement>(null);
 
+  const calAvgDuration = (record: NetflowAlert): string=> {
+    let avg = record.total_flow_duration / record.connection_counts
+    let fromatted = avg.toFixed(2);
+    return avg == Number(fromatted) ? String(avg) : fromatted;
+  }
+
   return (
     <div className={`${className} font-sans`}>
       {/* <div className="relative overflow-x-auto shadow-md sm:rounded-lg"> */}
@@ -176,7 +170,7 @@ const AlertTable = ({ className, setSort, sort, data }: Props): ReactNode => {
             />
           </div>
         </div>
-        <div className="flex-[6] px-4 py-3  " ref={header2}>
+        <div className="flex-[5] px-4 py-3  " ref={header2}>
           <div className="flex justify-start items-start text-sm">
             <span className={``}>Source Port</span>
             <SortSVG
@@ -196,7 +190,7 @@ const AlertTable = ({ className, setSort, sort, data }: Props): ReactNode => {
             />
           </div>
         </div>
-        <div className="flex-[6] px-4 py-3  " ref={header4}>
+        <div className="flex-[5] px-4 py-3  " ref={header4}>
           <div className="flex justify-start items-start text-sm">
             <span className={``}>Destination Port</span>
             <SortSVG
@@ -206,9 +200,29 @@ const AlertTable = ({ className, setSort, sort, data }: Props): ReactNode => {
             />
           </div>
         </div>
-        <div className="flex-[6] px-4 py-3  " ref={header5}>
+        <div className="flex-[5] px-4 py-3  " ref={header4}>
           <div className="flex justify-start items-start text-sm">
-            <span className={``}>Flow Duration</span>
+            <span className={``}>Source ASN</span>
+            <SortSVG
+              className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
+              onClick={handleSort("src_asn")}
+              key={`src_asn`}
+            />
+          </div>
+        </div>
+        <div className="flex-[5] px-4 py-3  " ref={header4}>
+          <div className="flex justify-start items-start text-sm">
+            <span className={``}>Destination ASN</span>
+            <SortSVG
+              className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
+              onClick={handleSort("dst_asn")}
+              key={`dst_asn`}
+            />
+          </div>
+        </div>
+        <div className="flex-[5] px-4 py-3  " ref={header5}>
+          <div className="flex justify-start items-start text-sm">
+            <span className={``}>Avg. Flow Duration</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
               onClick={handleSort("total_flow_duration")}
@@ -216,9 +230,9 @@ const AlertTable = ({ className, setSort, sort, data }: Props): ReactNode => {
             />
           </div>
         </div>
-        <div className="flex-[15] px-4 py-3  " ref={header6}>
+        <div className="flex-[20] px-4 py-3  " ref={header6}>
           <div className="flex justify-start items-start text-sm">
-            <span className={``}>Threats</span>
+            <span className={``}>Malicious Sources</span>
             {/* <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
               onClick={handleSort("total_flow_duration")}
@@ -226,9 +240,9 @@ const AlertTable = ({ className, setSort, sort, data }: Props): ReactNode => {
             /> */}
           </div>
         </div>
-        <div className="flex-[12] px-4 py-3  " ref={header7}>
+        <div className="flex-[10] px-4 py-3  " ref={header7}>
           <div className="flex justify-start items-start text-sm">
-            <span className={``}>First Seen</span>
+            <span className={``}>First Seen {'(IST)'}</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
               onClick={handleSort("first_seen")}
@@ -236,9 +250,9 @@ const AlertTable = ({ className, setSort, sort, data }: Props): ReactNode => {
             />
           </div>
         </div>
-        <div className="flex-[12] px-4 py-3  " ref={header8}>
+        <div className="flex-[10] px-4 py-3  " ref={header8}>
           <div className="flex justify-start items-start text-sm">
-            <span className={``}>Last Seen</span>
+            <span className={``}>Last Seen {'(IST)'}</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
               onClick={handleSort("last_seen")}
@@ -283,10 +297,16 @@ const AlertTable = ({ className, setSort, sort, data }: Props): ReactNode => {
               <TableRow referenceRef={header4} className={`inline-block  `}>
                 <div className="w-full truncate    py-4">{record.dst_port}</div>
               </TableRow>
+              <TableRow referenceRef={header4} className={`inline-block  `}>
+                <div className="w-full truncate    py-4">{record.src_asn}</div>
+              </TableRow>
+              <TableRow referenceRef={header4} className={`inline-block  `}>
+                <div className="w-full truncate    py-4">{record.dst_asn}</div>
+              </TableRow>
               <TableRow referenceRef={header5} className={`inline-block  `}>
                 <div className="w-full truncate    py-4">
-                  {record.total_flow_duration}{" "}
-                  <span className={`text-gray-500`}>{"bytes"}</span>
+                  {calAvgDuration(record)}{" "}
+                  <span className={`text-gray-500`}>{"ms"}</span>
                 </div>
               </TableRow>
               <TableRow referenceRef={header6} className={`inline-block  `}>
