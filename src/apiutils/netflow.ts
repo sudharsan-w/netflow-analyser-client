@@ -1,13 +1,17 @@
 import axios from "axios";
 
 import {
+  FetchFlowDistQuery,
   FetchNetflowAlertQuery,
   FetchNetflowAlertResponse,
   FetchNetflowQuery,
   FetchNetflowResponse,
   FetchNetflowUserQuery,
   FetchNetflowUserResponse,
+  FetchProtocolDistQuery,
 } from "../types/types";
+
+import { FlowDistribution, ProtocolDistribution } from "../types/schema.ts";
 
 let API_URL = import.meta.env.VITE_API_URL;
 
@@ -50,6 +54,38 @@ export const fetNetflowAlerts = async (
 ) => {
   return axios.post<FetchNetflowAlertResponse>(
     `${API_URL}/v1/get/netflow_alerts`,
+    query.body.filters,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: query.params,
+    }
+  );
+};
+
+export const fetProtoDist = async (
+  query: FetchProtocolDistQuery,
+  token: string
+) => {
+  return axios.post<ProtocolDistribution>(
+    `${API_URL}/v1/get/proto_dist`,
+    query.body.filters,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: query.params,
+    }
+  );
+};
+
+export const fetFlowDist = async (
+  query: FetchFlowDistQuery,
+  token: string
+) => {
+  return axios.post<FlowDistribution>(
+    `${API_URL}/v1/get/netflow_dist`,
     query.body.filters,
     {
       headers: {

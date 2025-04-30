@@ -109,6 +109,16 @@ const UserPage = ({ className }: Props): ReactNode => {
     dispatch(fetchNetflowThunk({}));
   }, [page, sort, searchKey, dateFrom, dateTo, filters]);
 
+  useEffect(() => {
+    if (fetchData?.data && fetchData.data.length > 0) {
+      setShowUserDetails(fetchData.data[0]);
+    }
+  }, [fetchData]);
+
+  useEffect(() => {
+    setShowUserDetails(null);
+  }, [page, sort, searchKey, dateFrom, dateTo, filters]);
+
   return (
     <div className={`${className}`}>
       <UserPageSubNav

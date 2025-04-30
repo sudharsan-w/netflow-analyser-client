@@ -85,7 +85,7 @@ const UserPageSubNav = ({
           </div>
           {showFilters && (
             <div
-              className={`z-50 right-0 absolute  shadow-lg bg-white p-4 w-1/4`}
+              className={`z-50 right-0 absolute shadow-lg bg-white p-4 w-1/4`}
             >
               <div className={`mb-4`}>
                 <span className={`text-md font-bold mb-1`}>Country</span>

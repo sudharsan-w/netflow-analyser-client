@@ -28,7 +28,7 @@ export default function () {
     <>
       <Routes>
         <Route path={"/"} element={<Navigate to={"/flows"} replace />} />
-        <Route path={"/login"} element={!isAuthenticated ? <LoginPage /> : <Navigate to={ `/users`} />} />
+        <Route path={"/login"} element={!isAuthenticated ? <LoginPage /> : <Navigate to={ `/flows`} />} />
         <Route path={"/flows"} element={<FlowPage />} />
         <Route path={"/users"} element={<UserPage />} />
         <Route path={"/alerts"} element={<AlertPage />} />

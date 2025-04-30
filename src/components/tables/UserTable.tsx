@@ -114,7 +114,7 @@ const UserTable = ({
         {data.map((record) => {
           return (
             <div
-              className={` text-gray-700 flex rounded-2xl shadow-gray-400 shadow-sm text-sm mb-4 border-1 border-ter-1000 test-sm cursor-pointer transition-all duration-700 ease-in-out ${
+              className={` text-gray-700 flex rounded-2xl shadow-gray-400 shadow-sm text-sm mb-4 border-1 border-ter-1000 test-sm cursor-pointer transition-all duration-500 ease-in-out ${
                 showUserDetails?.ip == record.ip ? "bg-ter-1000 scale-[103%]" : "bg-ter-250/90"
               }`}
               onClick={() => {
@@ -169,7 +169,7 @@ const UserTable = ({
                 referenceRef={header5}
                 className={`inline-block truncate`}
               >
-                <div className="w-full py-4">{record.malicous_count}</div>
+                <div className="w-full py-4">{record.malicious_count}</div>
               </TableRow>
               <TableRow
                 referenceRef={header6}

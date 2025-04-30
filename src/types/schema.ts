@@ -84,7 +84,29 @@ export const NetflowAlertSchema = z.object({
   alerts: z.record(z.any()).optional(),
 });
 
+const ProtoDistItemSchema = z.object({
+  count: z.number(),
+  proto: z.string(),
+});
+export const ProtocolDistributionSchema = z.object({
+  total: z.number(),
+  dist: z.array(ProtoDistItemSchema),
+});
+
+const FlowDistItemSchema = z.object({
+  count: z.number(),
+  bucket: z.string(),
+});
+export const FlowDistributionSchema = z.object({
+  total: z.number(),
+  dist: z.array(ProtoDistItemSchema),
+});
+
 export type NetflowAlert = z.infer<typeof NetflowAlertSchema>;
 export type Malicious = z.infer<typeof MaliciousSchema>;
 export type NetflowRecord = z.infer<typeof NetflowRecordSchema>;
 export type UserNetflow = z.infer<typeof UserNetflowSchema>;
+export type ProtocolDistribution = z.infer<typeof ProtocolDistributionSchema>;
+export type ProtoDistItem = z.infer<typeof ProtoDistItemSchema>;
+export type FlowDistribution = z.infer<typeof FlowDistributionSchema>;
+export type FlowDistItem = z.infer<typeof FlowDistItemSchema>;
