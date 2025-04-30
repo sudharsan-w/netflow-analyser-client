@@ -46,7 +46,7 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
     <div className={`${className} font-sans`}>
       {/* <div className="relative overflow-x-auto shadow-md sm:rounded-lg"> */}
       {/* <div className="w-full text-left rtl:text-right text-gray-500black "> */}
-      <div className="flex text-txt-1000 bg-ter-1000 mb-4 rounded-lg">
+      <div className="flex text-txt-1000 bg-ter-1000 mb-4 rounded-lg min-h-16">
         <div className="flex-[15] px-4 py-3  " ref={header2}>
           <div className="flex justify-start items-start text-sm">
             <span className={``}>Source Address</span>

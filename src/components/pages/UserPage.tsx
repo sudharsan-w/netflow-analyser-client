@@ -13,6 +13,8 @@ import {
   setFetchNetflowSliceState,
 } from "../../redux_store/features/fetchnetflowuser.ts";
 import { getIsoCodeFromCountryName } from "../../utils/country.ts";
+import { UserNetflow } from "../../types/schema.ts";
+import UserDetailsCard from "../cards/UserDetailsCard.tsx";
 
 type Props = {
   className?: String;
@@ -21,13 +23,18 @@ type Props = {
 const UserPage = ({ className }: Props): ReactNode => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [sort, setSort] = useState<Sort>({ sortBy: "date_updated", sortOrder: "desc" });
+  const [sort, setSort] = useState<Sort>({
+    sortBy: "date_updated",
+    sortOrder: "desc",
+  });
   const [page, setPage] = useState<number>(1);
   const [searchKey, setSearchKey] = useState<String>("");
   const [dateFrom, setDateFrom] = useState<Date | null>(null);
   const [filters, setFilters] = useState<Filters>({});
   const [dateTo, setDateTo] = useState<Date | null>(null);
-
+  const [showUserDetails, setShowUserDetails] = useState<UserNetflow | null>(
+    null
+  );
   const {
     value: {
       success: fetchSuccess,
@@ -40,6 +47,32 @@ const UserPage = ({ className }: Props): ReactNode => {
   const { value: fetchnetflowuser } = useSelector(
     (state: RootState) => state.fetchnetflowuser
   );
+
+  // setTimeout(() => {
+  //   setShowUserDetails({
+  //     usr_id: "a8acbe47-af3e-40bb-8aaf-35a08c847bbe",
+  //     date_added: "2025-04-30T10:47:02.941000+05:30",
+  //     date_updated: "2025-04-30T10:56:03.307000+05:30",
+  //     src_connection_count: 34,
+  //     dst_connection_count: 34,
+  //     // malicous_ccount: null,
+  //     ip: "142.93.189.58",
+  //     ip_version: "4",
+  //     asn: "AS14061",
+  //     geo_location: {
+  //       city: "North Bergen",
+  //       continent: "North America",
+  //       country: "United States",
+  //       iso_code: "US",
+  //       latitude: 40.8054,
+  //       longitude: -74.0241,
+  //       subdivision: "New Jersey",
+  //     },
+  //     // malicous_crefs: null,
+  //     schema_version: 1,
+  //     country_code: "US",
+  //   });
+  // }, 500);
 
   useEffect(() => {
     dispatch(fetchNetflowThunk({}));
@@ -97,12 +130,25 @@ const UserPage = ({ className }: Props): ReactNode => {
         )}
         {fetchSuccess && fetchData ? (
           <>
-            <UserTable
-              className={`px-10 mb-8`}
-              sort={sort}
-              setSort={setSort}
-              data={fetchData?.data}
-            />
+            <div className={`flex`}>
+              <UserTable
+                className={`px-10 mb-8 ${
+                  showUserDetails != null ? "w-3/5" : "w-full"
+                } transition-all duration-1000 ease-in-out`}
+                sort={sort}
+                setSort={setSort}
+                data={fetchData?.data}
+                showUserDetails={showUserDetails}
+                setShowUserDetails={setShowUserDetails}
+              />
+              {showUserDetails && (
+                <UserDetailsCard
+                  className={`mb-8`}
+                  data={showUserDetails}
+                  setData={setShowUserDetails}
+                />
+              )}
+            </div>
             <PaginationComponent
               className={`flex justify-center`}
               meta={fetchData as Pagination}

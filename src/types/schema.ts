@@ -6,7 +6,7 @@ export const UserNetflowSchema = z.object({
   date_updated: z.string().optional(),
   src_connection_count: z.number(),
   dst_connection_count: z.number(),
-  malicous_count: z.number().optional(),
+  malicious_count: z.number().optional(),
   ip: z.string(),
   ip_version: z.string(),
   asn: z.string().optional(),

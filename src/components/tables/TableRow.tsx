@@ -34,7 +34,7 @@ const MatchWidth: React.FC<MatchWidthProps> = ({
     setWidth();
     window.addEventListener('resize', setWidth);
     return () => window.removeEventListener('resize', setWidth);
-  }, [referenceRef]);
+  }, [referenceRef, referenceRef.current?.style.width]);
 
   return (
     <div ref={selfRef} style={style} className={className}>
