@@ -16,6 +16,16 @@ const PaginationComponent = ({
   setPage,
 }: Props): ReactNode => {
   const [gotoPage, setGotoPage] = useState<number | null>(null);
+  const handleGotoPage = () => {
+    if (gotoPage !== null) {
+      setPage(gotoPage);
+    }
+  };
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleGotoPage()
+    }
+  };
   if (meta.page_no == 0) {
     return <></>;
   }
@@ -80,6 +90,7 @@ const PaginationComponent = ({
         <input
           className={`outline-none  w-16 text-gray-500`}
           type={`number`}
+          onKeyDown={handleKeyDown}
           onChange={(e) => {
             let val = e.target.value;
             setGotoPage(Number.parseInt(val));
@@ -89,11 +100,7 @@ const PaginationComponent = ({
           className={`h-6 w-6 cursor-pointer ${
             meta.has_next_pages ? "fill-gray-500" : "fill-gray-200"
           }`}
-          onClick={() => {
-            if (gotoPage !== null) {
-              setPage(gotoPage);
-            }
-          }}
+          onClick={handleGotoPage}
         />
       </div>
     </div>

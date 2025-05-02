@@ -30,13 +30,64 @@ import {
   setFetchFlowDistSlice,
   setFetchFlowDistSliceInitialState,
 } from "../../redux_store/features/fetchflowdist";
-import CustomDateFrom from "../misc/CustomDateFrom.tsx";
-import CustomDateTo from "../misc/CustomDateTo.tsx";
+import SimpleSelect from "../select/SimpleSelect.tsx";
+import { TimeGranularity } from "../../types/types.ts";
 
 type Props = {
   data: UserNetflow;
   setData: React.Dispatch<React.SetStateAction<UserNetflow | null>>;
   className?: string;
+};
+
+enum TimeRange {
+  PAST_5MIN = "past_5min",
+  PAST_1HR = "past_1hr",
+  PAST_24HRS = "past_24_hrs",
+}
+
+const TimeRangeMeta: {
+  [key in TimeRange]: {
+    displayName: string;
+    value: string;
+  };
+} = {
+  [TimeRange.PAST_5MIN]: {
+    displayName: "Past 5 mins",
+    value: TimeRange.PAST_5MIN,
+  },
+  [TimeRange.PAST_1HR]: {
+    displayName: "Past 1 hr",
+    value: TimeRange.PAST_1HR,
+  },
+  [TimeRange.PAST_24HRS]: {
+    displayName: "Past 24 hrs",
+    value: TimeRange.PAST_24HRS,
+  },
+};
+
+const handleTimeRanges = (tr: TimeRange): [Date | null, Date | null, TimeGranularity] => {
+  let curr_dt = new Date();
+  let st_date: Date | null = null,
+    en_date: Date | null = null;
+  let granularity: TimeGranularity = "day";
+  switch (tr) {
+    case TimeRange.PAST_5MIN:
+      st_date = new Date(curr_dt.getTime() - 300 * 1000);
+      en_date = curr_dt;
+      granularity = "minute";
+      break;
+    case TimeRange.PAST_1HR:
+      st_date = new Date(curr_dt.getTime() - 60 * 60 * 1000);
+      en_date = curr_dt;
+      granularity = "minute";
+      break;
+    case TimeRange.PAST_24HRS:
+      st_date = new Date(curr_dt.getTime() - 24 * 60 * 60 * 1000);
+      en_date = curr_dt;
+      granularity = "hour";
+      break;
+  }
+  return [st_date, en_date, granularity];
 };
 
 const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
@@ -47,10 +98,12 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
     "rgba(174, 78, 109, 1)",
     "rgba(162, 172, 189, 1)",
   ];
-  const [dateFrom, setDateFrom] = useState<Date | null>(null);
-  const [dateTo, setDateTo] = useState<Date | null>(null);
-  const [flowDateFrom, setFlowDateFrom] = useState<Date | null>(null);
-  const [flowDateTo, setFlowDateTo] = useState<Date | null>(null);
+  const [flowTimeRange, setFlowTimeRange] = useState<TimeRange>(
+    TimeRange.PAST_24HRS
+  );
+  const [protoTimeRange, setProtoTimeRange] = useState<TimeRange>(
+    TimeRange.PAST_24HRS
+  );
   const {
     value: {
       success: fetchSuccess,
@@ -79,6 +132,7 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
   );
 
   const fetchProto = () => {
+    const [stDate, enDate, _] = handleTimeRanges(protoTimeRange);
     dispatch(
       setFetchProtoDistSlice({
         ...fetchprotodist,
@@ -86,8 +140,8 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
           ...fetchprotodist.query,
           params: {
             ...fetchprotodist.query.params,
-            date_from: dateFrom ? dateFrom.toISOString().slice(0, 10) : null,
-            date_to: dateTo ? dateTo.toISOString().slice(0, 10) : null,
+            date_from: stDate?.toISOString().slice(0, 19),
+            date_to: enDate?.toISOString().slice(0, 19),
           },
           body: {
             ...fetchprotodist.query.body,
@@ -103,6 +157,7 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
   };
 
   const fetchFlow = () => {
+    const [stDate, enDate, granularity] = handleTimeRanges(flowTimeRange);
     dispatch(
       setFetchFlowDistSlice({
         ...fetchflowdist,
@@ -110,11 +165,9 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
           ...fetchflowdist.query,
           params: {
             ...fetchflowdist.query.params,
-            granularity: "day",
-            date_from: flowDateFrom
-              ? flowDateFrom.toISOString().slice(0, 10)
-              : null,
-            date_to: flowDateTo ? flowDateTo.toISOString().slice(0, 10) : null,
+            granularity: granularity,
+            date_from: stDate?.toISOString().slice(0, 19),
+            date_to: enDate?.toISOString().slice(0, 19),
           },
           body: {
             ...fetchflowdist.query.body,
@@ -137,10 +190,10 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
   }, [data]);
   useEffect(() => {
     fetchProto();
-  }, [dateFrom, dateTo]);
+  }, [protoTimeRange]);
   useEffect(() => {
     fetchFlow();
-  }, [flowDateFrom, flowDateTo]);
+  }, [flowTimeRange]);
 
   return (
     <div
@@ -221,22 +274,11 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
               <CustomDateFrom dateFrom={dateFrom} setDateFrom={setDateFrom} className={`h-8 w-40 outline-none`}/>
               <CustomDateTo dateTo={dateTo} setDateTo={setDateTo} className={`h-8 w-40 outline-none`}/>
             </div> */}
-            <div className="grid grid-cols-2 gap-x-[17.6px]">
-              <div className="flex flex-col">
-                <CustomDateFrom
-                  dateFrom={dateFrom}
-                  setDateFrom={setDateFrom}
-                  className={`h-6 w-40 outline-none`}
-                />
-              </div>
-              <div className="flex flex-col">
-                <CustomDateTo
-                  dateTo={dateTo}
-                  setDateTo={setDateTo}
-                  className={`h-6 w-40 outline-none`}
-                />
-              </div>
-            </div>
+            <SimpleSelect
+              options={Object.entries(TimeRangeMeta).map(([_, v]) => v)}
+              selectedOption={protoTimeRange}
+              setSelectedOption={setProtoTimeRange}
+            />
           </div>
           {fetchLoading ? (
             <BufferSVG className={`mx-auto h-10 w-10 animate-spin`} />
@@ -291,22 +333,11 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
         >
           <div className={`flex justify-between`}>
             <p className={`text-xl font-bold`}>Flow Distribution</p>
-            <div className="grid grid-cols-2 gap-x-[17.6px]">
-              <div className="flex flex-col">
-                <CustomDateFrom
-                  dateFrom={flowDateFrom}
-                  setDateFrom={setFlowDateFrom}
-                  className={`h-6 w-40 outline-none`}
-                />
-              </div>
-              <div className="flex flex-col">
-                <CustomDateTo
-                  dateTo={flowDateTo}
-                  setDateTo={setFlowDateTo}
-                  className={`h-6 w-40 outline-none`}
-                />
-              </div>
-            </div>
+            <SimpleSelect
+              options={Object.entries(TimeRangeMeta).map(([_, v]) => v)}
+              selectedOption={flowTimeRange}
+              setSelectedOption={setFlowTimeRange}
+            />
           </div>
           {fetchLoading ? (
             <BufferSVG className={`mx-auto w-10 animate-spin`} />
