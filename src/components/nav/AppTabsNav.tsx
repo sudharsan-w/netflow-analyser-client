@@ -13,14 +13,14 @@ const AppTabsNav = ({ className }: Props): ReactNode => {
     const navigate = useNavigate()
     return <div className={`${className} flex justify-between`}>
         { 
-            Object.keys(AppTabsMeta).map((key: AppTabs): ReactNode => {
-                let isChoosen = AppTabsMeta[key].route == location.pathname
+            Object.entries(AppTabsMeta).map(([_, val]): ReactNode => {
+                let isChoosen = val.route == location.pathname
                 return (
                     <div className={`flex items-center justify-center rounded-2xl font-sans text-md py-0.5 px-2 mr-4 cursor-pointer w-1/4 text-center
                         ${isChoosen ? '' : 'hover:bg-ter-750 '}
                         ${isChoosen ? 'bg-pri-250 text-pri-1000' : 'text-txt-1000'}`}
-                    onClick={()=>navigate(AppTabsMeta[key].route)}>
-                        {AppTabsMeta[key].displayName }
+                    onClick={()=>navigate(val.route)}>
+                        {val.displayName }
                     </div>
                 )
             })

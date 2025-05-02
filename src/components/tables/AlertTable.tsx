@@ -19,7 +19,7 @@ const ListCell = ({
   className,
   data,
 }: {
-  data: Array<string|null|undefined>;
+  data: Array<string | null | undefined>;
   className?: string;
 }): ReactNode => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -85,30 +85,33 @@ const ListCell = ({
           showAll ? "flex flex-wrap" : "flex flex-nowrap"
         }   w-5/6`}
       >
-        {!showAll
-          ? data.map((item, index) => (
-              <div
-                key={index}
-                ref={(el: HTMLDivElement | undefined) =>
-                  (itemRefs.current[index] = el)
-                }
-                className={`px-2 py-1 ml-1 bg-pri-250 rounded-2xl text-sm ${
-                  index >= visibleCount ? "opacity-0" : ""
-                }`}
-              >
-                {item}
-              </div>
-            ))
-          : // <div className={`flex-wrap`}>
-            data.map((item, index) => (
-              <div
-                key={index}
-                className={`px-2 py-1 ml-1 mb-1 bg-pri-250 rounded-2xl text-sm `}
-              >
-                {item}
-              </div>
-            ))
-            // </div>
+        {
+          !showAll
+            ? data.map((item, index) => (
+                <div
+                  key={index}
+                  ref={(el: HTMLDivElement | null) => {
+                    if (el) {
+                      itemRefs.current[index] = el;
+                    }
+                  }}
+                  className={`px-2 py-1 ml-1 bg-pri-250 rounded-2xl text-sm ${
+                    index >= visibleCount ? "opacity-0" : ""
+                  }`}
+                >
+                  {item}
+                </div>
+              ))
+            : // <div className={`flex-wrap`}>
+              data.map((item, index) => (
+                <div
+                  key={index}
+                  className={`px-2 py-1 ml-1 mb-1 bg-pri-250 rounded-2xl text-sm `}
+                >
+                  {item}
+                </div>
+              ))
+          // </div>
         }
       </div>
       {
@@ -121,7 +124,6 @@ const ListCell = ({
       }
     </div>
   );
-
 };
 
 const AlertTable = ({ className, setSort, sort, data }: Props): ReactNode => {
@@ -149,11 +151,11 @@ const AlertTable = ({ className, setSort, sort, data }: Props): ReactNode => {
   const header7 = useRef<HTMLDivElement>(null);
   const header8 = useRef<HTMLDivElement>(null);
 
-  const calAvgDuration = (record: NetflowAlert): string=> {
-    let avg = record.total_flow_duration / record.connection_counts
+  const calAvgDuration = (record: NetflowAlert): string => {
+    let avg = record.total_flow_duration / record.connection_counts;
     let fromatted = avg.toFixed(2);
     return avg == Number(fromatted) ? String(avg) : fromatted;
-  }
+  };
 
   return (
     <div className={`${className} font-sans`}>
@@ -242,7 +244,7 @@ const AlertTable = ({ className, setSort, sort, data }: Props): ReactNode => {
         </div>
         <div className="flex-[10] px-4 py-3  " ref={header7}>
           <div className="flex justify-start items-start text-sm">
-            <span className={``}>First Seen {'(IST)'}</span>
+            <span className={``}>First Seen {"(IST)"}</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
               onClick={handleSort("first_seen")}
@@ -252,7 +254,7 @@ const AlertTable = ({ className, setSort, sort, data }: Props): ReactNode => {
         </div>
         <div className="flex-[10] px-4 py-3  " ref={header8}>
           <div className="flex justify-start items-start text-sm">
-            <span className={``}>Last Seen {'(IST)'}</span>
+            <span className={``}>Last Seen {"(IST)"}</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
               onClick={handleSort("last_seen")}

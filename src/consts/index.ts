@@ -2,8 +2,8 @@ import { AppTabs } from "../types/enums";
 
 export const AppTabsMeta: {
   [key in AppTabs]: {
-    displayName: String;
-    route: String;
+    displayName: string;
+    route: string;
   };
 } = {
   [AppTabs.FLOW_PAGE]: {

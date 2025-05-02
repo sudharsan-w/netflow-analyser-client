@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b --noEmit && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -31,8 +31,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
+    "@types/lodash": "^4.17.16",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "@types/react-world-flags": "^1.6.0",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.22.0",
     "eslint-plugin-react-hooks": "^5.2.0",

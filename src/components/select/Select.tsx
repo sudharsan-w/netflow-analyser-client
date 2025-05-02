@@ -138,7 +138,7 @@ const DynamicInputSearch = ({
       >
         <ArrowSVG
           className=" absolute right-2 top-2 h-6 w-6 hover:cursor-pointer rotate-90"
-          onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+          onClick={(e) => {
             e.stopPropagation();
             setDisplayAllIndustry((prev) => !prev);
           }}
