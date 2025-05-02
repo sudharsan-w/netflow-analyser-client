@@ -94,8 +94,8 @@ const UserTable = ({
             Malicious Connection Count
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
-              onClick={handleSort("malicous_ccount")}
-              key={`malicous_ccount`}
+              onClick={handleSort("malicious_count")}
+              key={`malicious_count`}
             />
           </div>
         </div>

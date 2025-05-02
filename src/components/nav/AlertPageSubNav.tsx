@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 import AppTabsNav from "./AppTabsNav";
 import DynamicInputSearch from "../select/Select.tsx";
@@ -46,6 +46,7 @@ const AlertPageSubNav = ({
   dateTo,
   dateFrom,
 }: Props): ReactNode => {
+  const filterPopupRef = useRef<HTMLDivElement | null>(null);
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const [protocolKeys, setProtocolKeys] = useState<string[]>([]);
   const [srcPortKeys, setSrcPortKeys] = useState<string[]>([]);
@@ -56,6 +57,27 @@ const AlertPageSubNav = ({
   const [dstAsnKeys, setDstAsnKeys] = useState<string[]>([]);
 
   const { token } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        filterPopupRef.current &&
+        !filterPopupRef.current.contains(event.target as Node)
+      ) {
+        setShowFilters(false);
+      }
+    };
+
+    if (showFilters) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showFilters]);
 
   const handleFilters = (key: string) => {
     return (selected: string[]) => {
@@ -71,25 +93,25 @@ const AlertPageSubNav = ({
   useEffect(() => {
     fetchProtocolKeys(token ?? "")
       .then((resp) => setProtocolKeys(resp.data))
-      .catch(console.log);
+      .catch(console.debug);
     fetchSrcPortKeys(token ?? "")
       .then((resp) => setSrcPortKeys(resp.data))
-      .catch(console.log);
+      .catch(console.debug);
     fetchDstPortKeys(token ?? "")
       .then((resp) => setDstPortKeys(resp.data))
-      .catch(console.log);
+      .catch(console.debug);
     fetchSrcCountryKeys(token ?? "")
       .then((resp) => setSrcCountryKeys(resp.data.map(getCountryName)))
-      .catch(console.log);
+      .catch(console.debug);
     fetchDstCountryKeys(token ?? "")
       .then((resp) => setDstCountryKeys(resp.data.map(getCountryName)))
-      .catch(console.log);
+      .catch(console.debug);
     fetchDstAsnKeys(token ?? "")
       .then((resp) => setDstAsnKeys(resp.data))
-      .catch(console.log);
+      .catch(console.debug);
     fetchSrcAsnKeys(token ?? "")
       .then((resp) => setSrcAsnKeys(resp.data))
-      .catch(console.log);
+      .catch(console.debug);
   }, []);
 
   return (
@@ -115,6 +137,7 @@ const AlertPageSubNav = ({
           </div>
           {showFilters && (
             <div
+              ref={filterPopupRef}
               className={`z-50 right-0 absolute text-gray-700 shadow-lg bg-white p-4 w-1/4`}
             >
               {/* <div className={`mb-4`}>
@@ -136,7 +159,9 @@ const AlertPageSubNav = ({
                 />
               </div>
               <div className={`mb-4`}>
-                <span className={`text-md font-bold mb-1`}>Destination ASN</span>
+                <span className={`text-md font-bold mb-1`}>
+                  Destination ASN
+                </span>
                 <DynamicInputSearch
                   placeholder="Source ASN"
                   allDataPossibleOptions={dstAsnKeys}

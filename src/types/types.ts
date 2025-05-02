@@ -1,8 +1,7 @@
 import * as schema from "./schema.ts";
 
 export type SortOrder = "asc" | "desc";
-export type TimeGranularity = "day" | "hour" | "minute"
-
+export type TimeGranularity = "day" | "hour" | "minute";
 
 export type Filters = {
   [key: string]: string[];
@@ -29,6 +28,7 @@ export type FetchNetflowResponse = {
   page_no: number;
   skip: number;
   limit: number;
+  total_results: number;
   pages_till: number;
   has_next_pages: boolean;
   has_prev_pages: boolean;
@@ -85,6 +85,7 @@ export type FetchNetflowUserResponse = {
   page_no: number;
   skip: number;
   limit: number;
+  total_results: number;
   pages_till: number;
   has_next_pages: boolean;
   has_prev_pages: boolean;
@@ -110,6 +111,7 @@ export type FetchNetflowAlertResponse = {
   page_no: number;
   skip: number;
   limit: number;
+  total_results: number;
   pages_till: number;
   has_next_pages: boolean;
   has_prev_pages: boolean;
@@ -125,6 +127,7 @@ export type Pagination = {
   page_no: number;
   skip: number;
   limit: number;
+  total_results: number | null;
   pages_till: number;
   has_next_pages: boolean;
   has_prev_pages: boolean;

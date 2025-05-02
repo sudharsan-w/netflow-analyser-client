@@ -19,7 +19,7 @@ export const fetNetflowRecords = async (
   query: FetchNetflowQuery,
   token: string
 ) => {
-  console.log(query);
+  console.debug(query);
   return axios.post<FetchNetflowResponse>(
     `${API_URL}/v1/get/netflows`,
     query.body.filters,

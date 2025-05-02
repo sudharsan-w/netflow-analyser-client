@@ -151,6 +151,17 @@ const AlertTable = ({ className, setSort, sort, data }: Props): ReactNode => {
   const header7 = useRef<HTMLDivElement>(null);
   const header8 = useRef<HTMLDivElement>(null);
 
+  const getMaliciousTypes = (record: NetflowAlert): string[] => {
+    const types_: string[] = [];
+    record.src_malicious_meta
+      .filter((e) => e.type_ != null)
+      .map((e) => types_.push(e.type_ ?? ""));
+    record.dst_malicious_meta
+      .filter((e) => e.type_ != null)
+      .map((e) => types_.push(e.type_ ?? ""));
+    return types_.filter((e) => e !== "");
+  };
+
   const calAvgDuration = (record: NetflowAlert): string => {
     let avg = record.total_flow_duration / record.connection_counts;
     let fromatted = avg.toFixed(2);
@@ -234,7 +245,7 @@ const AlertTable = ({ className, setSort, sort, data }: Props): ReactNode => {
         </div>
         <div className="flex-[20] px-4 py-3  " ref={header6}>
           <div className="flex justify-start items-start text-sm">
-            <span className={``}>Malicious Sources</span>
+            <span className={``}>Malicious Types</span>
             {/* <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
               onClick={handleSort("total_flow_duration")}
@@ -316,9 +327,7 @@ const AlertTable = ({ className, setSort, sort, data }: Props): ReactNode => {
                   {/* <span
                     className={`bg-pri-250 px-2 py-1 rounded-2xl text-black font bold`}
                   > */}
-                  <ListCell
-                    data={record.src_malicious_meta.map((e) => e.source)}
-                  />
+                  <ListCell data={getMaliciousTypes(record)} />
                   {/* </span> */}
                 </div>
               </TableRow>

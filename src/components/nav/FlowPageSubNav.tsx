@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 import AppTabsNav from "./AppTabsNav";
 import DynamicInputSearch from "../select/Select.tsx";
@@ -15,7 +15,7 @@ import {
   fetchSrcPortKeys,
   fetchProtocolKeys,
   fetchSrcCountryKeys,
-  fetchDstCountryKeys
+  fetchDstCountryKeys,
 } from "../../apiutils/netflow.ts";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux_store/store.ts";
@@ -44,6 +44,7 @@ const FlowPageSubNav = ({
   dateTo,
   dateFrom,
 }: Props): ReactNode => {
+  const filterPopupRef = useRef<HTMLDivElement | null>(null);
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const [protocolKeys, setProtocolKeys] = useState<string[]>([]);
   const [srcPortKeys, setSrcPortKeys] = useState<string[]>([]);
@@ -52,6 +53,27 @@ const FlowPageSubNav = ({
   const [dstCountryKeys, setDstCountryKeys] = useState<string[]>([]);
 
   const { token } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        filterPopupRef.current &&
+        !filterPopupRef.current.contains(event.target as Node)
+      ) {
+        setShowFilters(false);
+      }
+    };
+
+    if (showFilters) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showFilters]);
 
   const handleFilters = (key: string) => {
     return (selected: string[]) => {
@@ -65,21 +87,21 @@ const FlowPageSubNav = ({
   };
 
   useEffect(() => {
-    fetchProtocolKeys(token??"")
+    fetchProtocolKeys(token ?? "")
       .then((resp) => setProtocolKeys(resp.data))
-      .catch(console.log);
-    fetchSrcPortKeys(token??"")
+      .catch(console.debug);
+    fetchSrcPortKeys(token ?? "")
       .then((resp) => setSrcPortKeys(resp.data))
-      .catch(console.log);
-    fetchDstPortKeys(token??"")
+      .catch(console.debug);
+    fetchDstPortKeys(token ?? "")
       .then((resp) => setDstPortKeys(resp.data))
-      .catch(console.log);
-    fetchSrcCountryKeys(token??"")
+      .catch(console.debug);
+    fetchSrcCountryKeys(token ?? "")
       .then((resp) => setSrcCountryKeys(resp.data.map(getCountryName)))
-      .catch(console.log);
-    fetchDstCountryKeys(token??"")
+      .catch(console.debug);
+    fetchDstCountryKeys(token ?? "")
       .then((resp) => setDstCountryKeys(resp.data.map(getCountryName)))
-      .catch(console.log);
+      .catch(console.debug);
   }, []);
 
   return (
@@ -105,6 +127,7 @@ const FlowPageSubNav = ({
           </div>
           {showFilters && (
             <div
+              ref={filterPopupRef}
               className={`z-50 right-0 absolute text-gray-700 shadow-lg bg-white p-4 w-1/4`}
             >
               <div className={`mb-4`}>
@@ -137,9 +160,7 @@ const FlowPageSubNav = ({
                 />
               </div>
               <div className={`mb-4`}>
-                <span className={`text-md font-bold mb-1`}>
-                  Source Country
-                </span>
+                <span className={`text-md font-bold mb-1`}>Source Country</span>
                 <DynamicInputSearch
                   placeholder="Source Country"
                   allDataPossibleOptions={srcCountryKeys}

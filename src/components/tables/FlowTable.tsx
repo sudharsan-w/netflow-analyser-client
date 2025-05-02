@@ -69,7 +69,7 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
         </div>
         <div className="flex-[15] px-4 py-3  " ref={header4}>
           <div className="flex justify-start items-start text-sm">
-            <span className={``}>Dest Address</span>
+            <span className={``}>Destination Address</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
               onClick={handleSort("dst_addr")}
@@ -109,7 +109,7 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
         </div>
         <div className="flex-[10] px-4 py-3  " ref={header8}>
           <div className="flex justify-start items-start text-sm">
-            <span className={``}>Proto</span>
+            <span className={``}>Protocol</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
               onClick={handleSort("protocol")}
@@ -124,16 +124,6 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
               onClick={handleSort("protocol")}
               key={`protocol`}
-            />
-          </div>
-        </div>
-        <div className="flex-[10] px-4 py-3  " ref={header10}>
-          <div className="flex justify-start items-start text-sm">
-            <span className={``}>Malicious Status</span>
-            <SortSVG
-              className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
-              onClick={handleSort("src_malicious")}
-              key={`src_malicious`}
             />
           </div>
         </div>
@@ -216,11 +206,6 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
                   >
                     {record.ip_version}
                   </span>
-                </div>
-              </TableRow>
-              <TableRow referenceRef={header10} className={`inline-block  `}>
-                <div className="w-full truncate    py-4">
-                  {record.src_malicious}
                 </div>
               </TableRow>
               <TableRow referenceRef={header11} className={`inline-block  `}>

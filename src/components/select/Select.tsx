@@ -49,7 +49,7 @@ const DynamicInputSearch = ({
       const index = temp.findIndex(
         (selectedIndustry) => selectedIndustry === indsutry
       );
-      console.log("handleRemoveOption", valueHandler, index)
+      console.debug("handleRemoveOption", valueHandler, index)
       if (index !== -1) {
         temp.splice(index, 1);
         setHandler([...temp]);
@@ -93,7 +93,7 @@ const DynamicInputSearch = ({
   };
 
   useEffect(() => {
-    console.log(allDataPossibleOptions)
+    console.debug(allDataPossibleOptions)
     setAllIndustryList(
       allDataPossibleOptions.sort((a, b) => a.localeCompare(b))
     );

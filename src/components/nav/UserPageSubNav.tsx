@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 import AppTabsNav from "./AppTabsNav";
 import SearchSVG from "../../assets/react/Search";
@@ -35,12 +35,33 @@ const UserPageSubNav = ({
   setFilters,
   filters,
 }: Props): ReactNode => {
+  const filterPopupRef = useRef<HTMLDivElement | null>(null);
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const [userCountryKeys, setUserCountryKeys] = useState<string[]>([]);
   const [userAsnKeys, setUserAsnKeys] = useState<string[]>([]);
 
-
   const { token } = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        filterPopupRef.current &&
+        !filterPopupRef.current.contains(event.target as Node)
+      ) {
+        setShowFilters(false);
+      }
+    };
+
+    if (showFilters) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showFilters]);
 
   const handleFilters = (key: string) => {
     return (selected: string[]) => {
@@ -56,10 +77,10 @@ const UserPageSubNav = ({
   useEffect(() => {
     fetchUserCountryKeys(token ?? "")
       .then((resp) => setUserCountryKeys(resp.data.map(getCountryName)))
-      .catch(console.log);
+      .catch(console.debug);
     fetchUserAsnKeys(token ?? "")
       .then((resp) => setUserAsnKeys(resp.data))
-      .catch(console.log);
+      .catch(console.debug);
   }, []);
 
   return (
@@ -85,6 +106,7 @@ const UserPageSubNav = ({
           </div>
           {showFilters && (
             <div
+              ref={filterPopupRef}
               className={`z-50 right-0 absolute shadow-lg bg-white p-4 w-1/4`}
             >
               <div className={`mb-4`}>
