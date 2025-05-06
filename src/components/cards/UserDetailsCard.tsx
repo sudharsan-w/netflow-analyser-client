@@ -14,8 +14,8 @@ import {
   CartesianGrid,
   XAxis,
   YAxis,
-  Line,
-  LineChart,
+  Area,
+  AreaChart,
 } from "recharts";
 import { useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux_store/store";
@@ -197,12 +197,12 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
 
   return (
     <div
-      className={`w-full bg-white shadow-sm border-t-1 border-t-ter-1000 rouded-lg overflow-y-scroll h-[70vh] pb-10 ${className}`}
+      className={`w-full bg-white shadow-sm border-t-1 border-t-ter-1000 rounded-xl py-4 ${className}`}
     >
       <div
         className={`px-8 mb-4 flex justify-between items-center w-full h-16 `}
       >
-        <span className={`text-2xl font-bold `}> User Details</span>
+        <span className={`text-2xl font-semibold text-gray-700`}> User Details</span>
         <XSvg
           className={`fill-gray-400  h-6 w-6 cursor-pointer`}
           onClick={() => setData(null)}
@@ -211,16 +211,16 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
       <div className={`px-8`}>
         <div className={`grid grid-cols-4 gap-4`}>
           <div className={`flex flex-col justify-between h-full`}>
-            <p className={`text-sm text-gray-500 mb-1`}>Ip Address</p>
-            <p className={`text-sm text-gray-700`}>{data.ip}</p>
+            <p className={` text-gray-500 mb-1`}>Ip Address</p>
+            <p className={` text-gray-700`}>{data.ip}</p>
           </div>
           <div className={`flex flex-col justify-between h-full`}>
-            <p className={`text-sm text-gray-500 mb-1`}>ASN</p>
-            <p className={`text-sm text-gray-700`}>{data.asn}</p>
+            <p className={` text-gray-500 mb-1`}>ASN</p>
+            <p className={` text-gray-700`}>{data.asn}</p>
           </div>
           <div className={`flex flex-col justify-between h-full`}>
-            <p className={`text-sm text-gray-500 mb-1`}>Location</p>
-            <p className={`text-sm text-gray-700`}>
+            <p className={` text-gray-500 mb-1`}>Location</p>
+            <p className={` text-gray-700`}>
               {getCountryName(data.country_code ?? "")}
               <CountryFlag
                 isoCode={data.country_code ?? ""}
@@ -231,49 +231,45 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
             </p>
           </div>
           <div className={`flex flex-col justify-between h-full`}>
-            <p className={`text-sm text-gray-500 mb-1`}>First Seen (IST)</p>
-            <p className={`text-sm text-gray-700`}>
+            <p className={` text-gray-500 mb-1`}>First Seen (IST)</p>
+            <p className={` text-gray-700`}>
               {data.date_added.slice(0, 19).replace("T", ", ")}
             </p>
           </div>
           <div className={`flex flex-col justify-between h-full`}>
-            <p className={`text-sm text-gray-500 mb-1`}>Last Seen (IST)</p>
-            <p className={`text-sm text-gray-700`}>
+            <p className={` text-gray-500 mb-1`}>Last Seen (IST)</p>
+            <p className={` text-gray-700`}>
               {data.date_updated?.slice(0, 19).replace("T", ", ")}
             </p>
           </div>
           <div className={`flex flex-col justify-between h-full`}>
-            <p className={`text-sm text-gray-500 mb-1`}>Source Connections</p>
-            <p className={`text-sm text-gray-700`}>
+            <p className={` text-gray-500 mb-1`}>Source Connections</p>
+            <p className={` text-gray-700`}>
               {data.src_connection_count}
             </p>
           </div>
           <div className={`flex flex-col justify-between h-full`}>
-            <p className={`text-sm text-gray-500 mb-1`}>
+            <p className={` text-gray-500 mb-1`}>
               Destination Connections
             </p>
-            <p className={`text-sm text-gray-700`}>
+            <p className={` text-gray-700`}>
               {data.dst_connection_count}
             </p>
           </div>
           <div className={`flex flex-col justify-between h-full`}>
-            <p className={`text-sm text-gray-500 mb-1`}>
+            <p className={` text-gray-500 mb-1`}>
               Malicious Connections
             </p>
-            <p className={`text-sm text-gray-700`}>{data.malicious_count}</p>
+            <p className={` text-gray-700`}>{data.malicious_count}</p>
           </div>
         </div>
       </div>
-      <div className={`px-8 mt-4 `}>
+      <div className={`p-4 mt-4 w-full flex flex-col gap-5`}>
         <div
-          className={`h-96 border-t-1 border-t-ter-1000 shadow-lg px-4 py-4`}
+          className={`h-96 border-t-1 border-t-ter-1000 p-4 shadow-md rounded-lg`}
         >
           <div className={`flex justify-between`}>
-            <p className={`text-xl font-bold`}>Protocol Distribution</p>
-            {/* <div className={ `flex space-x-10`}>
-              <CustomDateFrom dateFrom={dateFrom} setDateFrom={setDateFrom} className={`h-8 w-40 outline-none`}/>
-              <CustomDateTo dateTo={dateTo} setDateTo={setDateTo} className={`h-8 w-40 outline-none`}/>
-            </div> */}
+            <p className={`text-2xl font-semibold text-gray-700`}>Protocol Distribution</p>
             <SimpleSelect
               options={Object.entries(TimeRangeMeta).map(([_, v]) => v)}
               selectedOption={protoTimeRange}
@@ -281,7 +277,9 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
             />
           </div>
           {fetchLoading ? (
-            <BufferSVG className={`mx-auto h-10 w-10 animate-spin`} />
+            <div className="h-80 w-full flex justify-center items-center">
+              <BufferSVG className={`mx-auto h-10 w-10 animate-spin`} />
+            </div>
           ) : (
             <div className={`flex w-full h-80 `}>
               <ResponsiveContainer className={`flex-2/3`}>
@@ -310,7 +308,7 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
               <div className={`flex justify-center items-center flex-1/3`}>
                 <div>
                   {fetchData?.dist.map((e, index) => (
-                    <div className={`mt-2 overflow-scroll`}>
+                    <div key={index} className={`mt-2 overflow-scroll`}>
                       <span
                         style={{
                           backgroundColor: COLORS[index % COLORS.length],
@@ -326,13 +324,11 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
             </div>
           )}
         </div>
-      </div>
-      <div className={`px-8 mt-4 `}>
         <div
-          className={`h-96 border-t-1 border-t-ter-1000 shadow-lg px-4 py-4`}
+          className={`h-96 border-t-1 border-t-ter-1000 shadow-md rounded-lg px-4 py-4`}
         >
-          <div className={`flex justify-between`}>
-            <p className={`text-xl font-bold`}>Flow Distribution</p>
+          <div className={`flex justify-between mb-4`}>
+            <p className={`text-2xl font-semibold text-gray-700`}>Flow Distribution</p>
             <SimpleSelect
               options={Object.entries(TimeRangeMeta).map(([_, v]) => v)}
               selectedOption={flowTimeRange}
@@ -340,11 +336,13 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
             />
           </div>
           {fetchLoading ? (
-            <BufferSVG className={`mx-auto w-10 animate-spin`} />
+            <div className="h-80 w-full flex justify-center items-center">
+              <BufferSVG className={`mx-auto h-10 w-10 animate-spin`} />
+            </div>
           ) : (
             <div className={`flex w-full h-80 `}>
               <ResponsiveContainer width="100%" height={300}>
-                <LineChart
+                <AreaChart
                   data={flowFetchData?.dist}
                   margin={{ top: 20, right: 30, bottom: 5, left: 0 }}
                 >
@@ -353,7 +351,7 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
                   <YAxis />
                   <Tooltip />
 
-                  <Line
+                  <Area
                     type="monotone"
                     dataKey="count"
                     stroke={COLORS[0]}
@@ -361,7 +359,7 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
                     dot={{ r: 4 }}
                     activeDot={{ r: 6 }}
                   />
-                </LineChart>
+                </AreaChart>
               </ResponsiveContainer>
             </div>
           )}

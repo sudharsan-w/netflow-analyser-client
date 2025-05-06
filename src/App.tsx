@@ -8,9 +8,9 @@ import Dashboard from "./components/routers/Dashboard";
 
 function App() {
   return (
-    <div className={`bg-tertiary-750`}>
+    <div className={`bg-background`}>
       <Layout>
-        <Dashboard />
+        <Dashboard/>
       </Layout>
     </div>
   );

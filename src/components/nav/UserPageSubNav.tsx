@@ -86,7 +86,7 @@ const UserPageSubNav = ({
   return (
     <div className={`flex justify-between mx-10 ${className}`}>
       <AppTabsNav className={`w-1/3 `} />
-      <div className={`flex`}>
+      <div className={`flex items-center`}>
         <div className="flex items-center px-4 py-2 space-x-2 bg-ter-750 rounded-lg mr-2">
           <SearchSVG className={`w-5 h-5 fill-ter-1000`} />
           <input
@@ -99,18 +99,18 @@ const UserPageSubNav = ({
         </div>
         <div>
           <div
-            className={`relative  pt-2 cursor-pointer group/item`}
+            className={`relative pt-2 cursor-pointer group/item`}
             onClick={() => setShowFilters(!showFilters)}
           >
-            <FilterFilledSVG className={`w-8 h-8`} />
+            <FilterFilledSVG className={`w-10 h-10`} />
           </div>
           {showFilters && (
             <div
               ref={filterPopupRef}
-              className={`z-50 right-0 absolute shadow-lg bg-white p-4 w-1/4`}
+              className={`z-50 right-14 absolute shadow-xl bg-white rounded-lg p-4 w-1/4 mt-4`}
             >
-              <div className={`mb-4`}>
-                <span className={`text-md font-bold mb-1`}>Country</span>
+              <div className={`mb-4 flex flex-col gap-2`}>
+                <span className={`text-md font-bold mb-1 text-gray-700`}>Country</span>
                 <DynamicInputSearch
                   placeholder="Country"
                   allDataPossibleOptions={userCountryKeys}
@@ -118,8 +118,8 @@ const UserPageSubNav = ({
                   valueHandler={filters["country_code"] ?? []}
                 />
               </div>
-              <div className={`mb-4`}>
-                <span className={`text-md font-bold mb-1`}>ASN</span>
+              <div className={`mb-4 flex flex-col gap-2`}>
+                <span className={`text-md font-bold mb-1 text-gray-700`}>ASN</span>
                 <DynamicInputSearch
                   placeholder="ASN"
                   allDataPossibleOptions={userAsnKeys}
@@ -128,8 +128,8 @@ const UserPageSubNav = ({
                 />
               </div>
               <div className={`mb-2`}>
-                <span className={`text-md font-bold `}>Date</span>
-                <div className="mt-[12px] grid grid-cols-2 gap-x-[17.6px]">
+                <span className={`text-md font-bold text-gray-700 `}>Date</span>
+                <div className="mt-[8px] grid grid-cols-2 gap-x-[17.6px]">
                   <div className="flex flex-col">
                     <span className="text-md font-semibold text-[#565a61]">
                       From

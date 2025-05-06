@@ -111,6 +111,5 @@ export const fetchNetflowSlice = createSlice({
 //   dispatch(fetchNetflowThunk(null));
 // };
 
-export const { setFetchNetflowSliceState, setFetchNetflowSliceInitialState } =
-  fetchNetflowSlice.actions;
+export const { setFetchNetflowSliceState, setFetchNetflowSliceInitialState } = fetchNetflowSlice.actions;
 export default fetchNetflowSlice.reducer;

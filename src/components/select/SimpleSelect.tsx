@@ -29,8 +29,8 @@ const SimpleSelect = ({
         onChange={handleChange}
         className={`rounded-lg px-1 py-1 outline-none`}
       >
-        {options.map((option) => (
-          <option value={option.value} >{option.displayName}</option>
+        {options.map((option, idx) => (
+          <option key={idx} value={option.value} >{option.displayName}</option>
         ))}
       </select>
     </div>

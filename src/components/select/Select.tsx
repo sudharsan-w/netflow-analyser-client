@@ -129,7 +129,7 @@ const DynamicInputSearch = ({
   return (
     <div className={`roudned-md relative flex flex-col ${className} `} ref={ref}>
       <div
-        className={`relative flex flex-col flex-wrap  rounded-md border pr-6 hover:cursor-text `}
+        className={`relative flex flex-col flex-wrap  rounded-md border border-gray-300 pr-6 hover:cursor-text `}
         onClick={(e) => {
           e.stopPropagation();
           setDisplayAllIndustry(true);

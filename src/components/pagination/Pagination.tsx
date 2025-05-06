@@ -53,10 +53,11 @@ const PaginationComponent = ({
           />
         </div>
         {[...range(meta.page_no, meta.pages_till + 1, 1)].map(
-          (page_num): ReactNode => {
+          (page_num, idx): ReactNode => {
             return (
               <div
-                className={`rounded-lg text-lg px-2 py-2 bg-ter-250 cursor-pointer text-txt-1000 
+                key={idx}
+                className={`rounded-lg text-lg px-4 py-2 bg-ter-250 cursor-pointer text-txt-1000 
               ${
                 page_num == meta.page_no ? "bg-ter-1000" : "hover:bg-ter-1000"
               }  

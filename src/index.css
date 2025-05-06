@@ -23,6 +23,11 @@
   --color-chart2-1000: rgba(174, 78, 109, 1);
   --color-chart3-1000: rgba(162, 172, 189, 1);
   --color-chart4-1000: rgba(33, 113, 181, 1);
+  --color-background: rgba(249, 249, 249, 1);
+  --color-header: rgba(234, 234, 234, 1);
+  --color-border: rgba(224, 224, 224, 1);
+  --color-row: rgba(249, 249, 249, 1);
+  --color-row-selected: rgba(241, 244, 251, 1);
 }
 
 

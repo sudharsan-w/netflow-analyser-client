@@ -10,8 +10,8 @@ type Props = {
 const Layout: React.FC<Props> = ({ children, className }: Props) => {
 
   return <div className={`${className}`}>
-    <TopBar className={ `mb-2`} />
-        {children}
+    <TopBar className={`mb-2`} />
+    {children}
   </div>;
 };
 

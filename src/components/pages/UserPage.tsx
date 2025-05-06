@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import UserTable from "../tables/UserTable";
@@ -22,6 +22,8 @@ type Props = {
 
 const UserPage = ({ className }: Props): ReactNode => {
   const dispatch = useDispatch<AppDispatch>();
+  const tableRef = useRef<HTMLDivElement>(null)
+  const [tableHeight, setTableHeight] = useState<number | null>(null)
 
   const [sort, setSort] = useState<Sort>({
     sortBy: "date_updated",
@@ -78,6 +80,12 @@ const UserPage = ({ className }: Props): ReactNode => {
     dispatch(fetchNetflowThunk({}));
   }, []);
 
+  useLayoutEffect(() => {
+    if (tableRef.current) {
+      setTableHeight(tableRef.current.offsetHeight);
+    }
+  }, [fetchData, showUserDetails]); // Re-measure on data load or visibility change
+  
   useEffect(() => {
     let tempFilters = { ...filters };
     if (tempFilters["country_code"]) {
@@ -120,7 +128,7 @@ const UserPage = ({ className }: Props): ReactNode => {
   }, [page, sort, searchKey, dateFrom, dateTo, filters]);
 
   return (
-    <div className={`${className}`}>
+    <div className={`${className} p-6`}>
       <UserPageSubNav
         className={`mb-6`}
         searchKey={searchKey}
@@ -140,30 +148,33 @@ const UserPage = ({ className }: Props): ReactNode => {
         )}
         {fetchSuccess && fetchData ? (
           <>
-            <div className={`flex`}>
+            <div className={`flex items-stretch overflow-y-auto h-full gap-5`}>
               <UserTable
-                className={`px-10 mb-8 ${
-                  showUserDetails != null ? "w-3/5" : "w-full"
-                } transition-all duration-1000 ease-in-out`}
+                className={`px-5 ${showUserDetails != null ? "w-3/5" : "w-full"
+                  } transition-all duration-1000 ease-in-out`}
                 sort={sort}
                 setSort={setSort}
+                ref={tableRef}
                 data={fetchData?.data}
                 showUserDetails={showUserDetails}
                 setShowUserDetails={setShowUserDetails}
               />
               {showUserDetails && (
                 <UserDetailsCard
-                  className={`mb-8`}
+                  className={`mb-8 overflow-y-scroll h-[868px]`}
                   data={showUserDetails}
                   setData={setShowUserDetails}
                 />
               )}
             </div>
-            <PaginationComponent
-              className={`flex justify-center`}
-              meta={fetchData as Pagination}
-              setPage={setPage}
-            />
+            <div className="w-screen bg-white rounded-sm p-3">
+              <PaginationComponent
+                className={`flex justify-center`}
+                meta={fetchData as Pagination}
+                setPage={setPage}
+              />
+            </div>
+
           </>
         ) : (
           <></>

@@ -9,7 +9,7 @@ type Props = {
 
 const TopBar = ({ className }: Props): ReactNode => {
   return (
-    <div className={`${className}`}>
+    <div className={`${className} border-border shadow-md`}>
       <div className={`flex justify-between pr-10 py-6`}>
         <SaptabglabsSVG className={ `h-8  p-0`} />
         <BellIcon className={`h-6 w-6 fill-pri-100`} />
