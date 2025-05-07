@@ -82,7 +82,7 @@ const FlowPage = ({ className }: Props): ReactNode => {
   return (
     <div className={`${className}`}>
       <FlowPageSubNav
-        className={`mb-6`}
+        className={`mb-6 pt-2`}
         searchKey={searchKey}
         setSearchKey={setSearchKey}
         setFilters={setFilters}
@@ -94,7 +94,9 @@ const FlowPage = ({ className }: Props): ReactNode => {
       />
       <div className={``}>
         {fetchLoading ? (
-          <BufferSVG className={`mx-auto mt-20 h-10 w-10 animate-spin`} />
+          <div className="h-screen flex items-start justify-center">
+            <BufferSVG className={`mx-auto mt-20 h-10 w-10 animate-spin`} />
+          </div>
         ) : (
           <></>
         )}
@@ -106,11 +108,13 @@ const FlowPage = ({ className }: Props): ReactNode => {
               setSort={setSort}
               data={fetchData?.data}
             />
-            <PaginationComponent
-              className={`flex justify-center`}
-              meta={fetchData as Pagination}
-              setPage={setPage}
-            />
+            <div className="w-screen bg-white rounded-sm p-3">
+              <PaginationComponent
+                className={`flex justify-center`}
+                meta={fetchData as Pagination}
+                setPage={setPage}
+              />
+            </div>
           </>
         ) : (
           <></>

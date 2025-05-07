@@ -123,15 +123,15 @@ const FlowPageSubNav = ({
             className={`relative  pt-2 cursor-pointer group/item`}
             onClick={() => setShowFilters(!showFilters)}
           >
-            <FilterFilledSVG className={`w-8 h-8`} />
+            <FilterFilledSVG className={`w-10 h-10`} />
           </div>
           {showFilters && (
             <div
               ref={filterPopupRef}
-              className={`z-50 right-0 absolute text-gray-700 shadow-lg bg-white p-4 w-1/4`}
+              className={`z-50 right-14 absolute text-gray-700 rounded-lg shadow-lg bg-white p-4 w-1/4 mt-4`}
             >
-              <div className={`mb-4`}>
-                <span className={`text-md font-bold mb-1`}>Protocol</span>
+              <div className={`mb-4 flex flex-col gap-2`}>
+                <span className={`text-md font-bold mb-1 text-gray-700`}>Protocol</span>
                 <DynamicInputSearch
                   placeholder="Protocol"
                   allDataPossibleOptions={protocolKeys}
@@ -139,8 +139,8 @@ const FlowPageSubNav = ({
                   valueHandler={filters["protocol"] ?? []}
                 />
               </div>
-              <div className={`mb-4`}>
-                <span className={`text-md font-bold mb-1`}>Source Port</span>
+              <div className={`mb-4 flex flex-col gap-2`}>
+                <span className={`text-md font-bold mb-1 text-gray-700`}>Source Port</span>
                 <DynamicInputSearch
                   placeholder="Source Port"
                   allDataPossibleOptions={srcPortKeys}
@@ -148,8 +148,8 @@ const FlowPageSubNav = ({
                   valueHandler={filters["src_port"] ?? []}
                 />
               </div>
-              <div className={`mb-4`}>
-                <span className={`text-md font-bold mb-1`}>
+              <div className={`mb-4 flex flex-col gap-2`}>
+                <span className={`text-md font-bold mb-1 text-gray-700`}>
                   Destination Port
                 </span>
                 <DynamicInputSearch
@@ -159,8 +159,8 @@ const FlowPageSubNav = ({
                   valueHandler={filters["dst_port"] ?? []}
                 />
               </div>
-              <div className={`mb-4`}>
-                <span className={`text-md font-bold mb-1`}>Source Country</span>
+              <div className={`mb-4 flex flex-col gap-2`}>
+                <span className={`text-md font-bold mb-1 text-gray-700`}>Source Country</span>
                 <DynamicInputSearch
                   placeholder="Source Country"
                   allDataPossibleOptions={srcCountryKeys}
@@ -168,8 +168,8 @@ const FlowPageSubNav = ({
                   valueHandler={filters["src_country_code"] ?? []}
                 />
               </div>
-              <div className={`mb-4`}>
-                <span className={`text-md font-bold mb-1`}>
+              <div className={`mb-4 flex flex-col gap-2`}>
+                <span className={`text-md font-bold mb-1 text-gray-700`}>
                   Destination Country
                 </span>
                 <DynamicInputSearch
@@ -192,7 +192,7 @@ const FlowPageSubNav = ({
                     />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-[13px] font-semibold text-[#565a61]">
+                    <span className="text-md font-semibold text-[#565a61]">
                       To
                     </span>
                     <CustomDateTo dateTo={dateTo} setDateTo={setDateTo} />

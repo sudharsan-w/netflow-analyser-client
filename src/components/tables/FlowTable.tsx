@@ -46,9 +46,9 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
     <div className={`${className} font-sans`}>
       {/* <div className="relative overflow-x-auto shadow-md sm:rounded-lg"> */}
       {/* <div className="w-full text-left rtl:text-right text-gray-500black "> */}
-      <div className="flex text-txt-1000 bg-ter-1000 mb-4 rounded-lg min-h-16">
+      <div className="flex text-txt-1000 bg-ter-1000 mb-4 rounded-lg min-h-16 items-center">
         <div className="flex-[15] px-4 py-3  " ref={header2}>
-          <div className="flex justify-start items-start text-sm">
+          <div className="flex justify-start items-center ">
             <span className={``}>Source Address</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
@@ -57,8 +57,8 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
             />
           </div>
         </div>
-        <div className="flex-[5] px-4 py-3  " ref={header3}>
-          <div className="flex justify-start items-start text-sm">
+        <div className="flex-[5] px-4 py-3" ref={header3}>
+          <div className="flex justify-start items-center ">
             <span className={``}>Source Port</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
@@ -68,7 +68,7 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
           </div>
         </div>
         <div className="flex-[15] px-4 py-3  " ref={header4}>
-          <div className="flex justify-start items-start text-sm">
+          <div className="flex justify-start items-center ">
             <span className={``}>Destination Address</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
@@ -78,7 +78,7 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
           </div>
         </div>
         <div className="flex-[5] px-4 py-3  " ref={header5}>
-          <div className="flex justify-start items-start text-sm">
+          <div className="flex justify-start items-center ">
             <span className={``}>Destination Port</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
@@ -88,7 +88,7 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
           </div>
         </div>
         <div className="flex-[5] px-4 py-3  " ref={header6}>
-          <div className="flex justify-start items-start text-sm">
+          <div className="flex justify-start items-center ">
             <span className={``}>Flow Size</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
@@ -97,8 +97,8 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
             />
           </div>
         </div>
-        <div className="flex-[10] px-4 py-3  " ref={header7}>
-          <div className="flex justify-start items-start text-sm">
+        <div className="flex-[10] px-4 py-3 " ref={header7}>
+          <div className="flex justify-start items-center ">
             <span className={``}>Flow Duration</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
@@ -108,7 +108,7 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
           </div>
         </div>
         <div className="flex-[10] px-4 py-3  " ref={header8}>
-          <div className="flex justify-start items-start text-sm">
+          <div className="flex justify-start items-center ">
             <span className={``}>Protocol</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
@@ -117,8 +117,8 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
             />
           </div>
         </div>
-        <div className="flex-[5] px-4 py-3  " ref={header9}>
-          <div className="flex justify-start items-start text-sm">
+        <div className="flex-[5] px-4 py-3 " ref={header9}>
+          <div className="flex justify-start items-center ">
             <span className={``}>IP Version</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
@@ -128,7 +128,7 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
           </div>
         </div>
         <div className="flex-[15] px-4 py-3  " ref={header11}>
-          <div className="flex justify-start items-start text-sm">
+          <div className="flex justify-start items-center ">
             <span className={``}>Start Time {'(IST)'}</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
@@ -138,7 +138,7 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
           </div>
         </div>
         <div className="flex-[15] px-4 py-3  " ref={header12}>
-          <div className="flex justify-start items-start text-sm">
+          <div className="flex justify-start items-center ">
             <span className={``}>End Time {'(IST)'}</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
@@ -151,7 +151,7 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
       <div className={``}>
         {data.map((record) => {
           return (
-            <div className="bg-white text-gray-700 flex rounded-2xl shadow-gray-400 shadow-sm text-sm mb-4 border-1 border-ter-1000 test-sm">
+            <div className="bg-white text-gray-700 flex rounded-2xl shadow-gray-400 shadow-sm mb-4 border-1 border-ter-1000 test-sm">
               <TableRow referenceRef={header2} className={`inline-block  `}>
                 <div className="w-full truncate    py-4">
                   {record.src_addr}

@@ -84,7 +84,7 @@ const AlertPage = ({ className }: Props): ReactNode => {
   return (
     <div className={`${className}`}>
       <AlertPageSubNav
-        className={`mb-6`}
+        className={`mb-6 pt-2`}
         searchKey={searchKey}
         setSearchKey={setSearchKey}
         setFilters={setFilters}

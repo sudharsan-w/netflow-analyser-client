@@ -32,6 +32,7 @@ import {
 } from "../../redux_store/features/fetchflowdist";
 import SimpleSelect from "../select/SimpleSelect.tsx";
 import { TimeGranularity } from "../../types/types.ts";
+import { getTimeFromDateTime } from "../../utils/index.ts";
 
 type Props = {
   data: UserNetflow;
@@ -197,7 +198,7 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
 
   return (
     <div
-      className={`w-full bg-white shadow-sm border-t-1 border-t-ter-1000 rounded-xl py-4 ${className}`}
+      className={`w-full bg-white shadow-sm border-t-1 border-t-ter-1000 rounded-xl ${className}`}
     >
       <div
         className={`px-8 mb-4 flex justify-between items-center w-full h-16 `}
@@ -347,17 +348,15 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
                   margin={{ top: 20, right: 30, bottom: 5, left: 0 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="bucket" />
+                  <XAxis dataKey="bucket" tickFormatter={(value: string) => getTimeFromDateTime(value)} />
                   <YAxis />
-                  <Tooltip />
+                  <Tooltip labelFormatter={(label) => `Time: ${getTimeFromDateTime(label)}`}/>
 
                   <Area
                     type="monotone"
                     dataKey="count"
                     stroke={COLORS[0]}
                     strokeWidth={2}
-                    dot={{ r: 4 }}
-                    activeDot={{ r: 6 }}
                   />
                 </AreaChart>
               </ResponsiveContainer>

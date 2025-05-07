@@ -56,3 +56,13 @@ export function* range(start: number, end: number, step: number = 1): Generator<
 export function cn(...args: ClassValue[]) {
   return twMerge(clsx(args));
 }
+
+export const getTimeFromDateTime = (dateTimeStr: string): string => {
+  const completeDateTime = dateTimeStr.length <= 13 ? dateTimeStr + ':00:00' : dateTimeStr;
+  const date = new Date(completeDateTime);
+
+  const hour = String(date.getHours()).padStart(2, '0');
+  const minute = String(date.getMinutes()).padStart(2, '0');
+
+  return `${hour}:${minute}`;
+}

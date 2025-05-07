@@ -50,32 +50,6 @@ const UserPage = ({ className }: Props): ReactNode => {
     (state: RootState) => state.fetchnetflowuser
   );
 
-  // setTimeout(() => {
-  //   setShowUserDetails({
-  //     usr_id: "a8acbe47-af3e-40bb-8aaf-35a08c847bbe",
-  //     date_added: "2025-04-30T10:47:02.941000+05:30",
-  //     date_updated: "2025-04-30T10:56:03.307000+05:30",
-  //     src_connection_count: 34,
-  //     dst_connection_count: 34,
-  //     // malicous_ccount: null,
-  //     ip: "142.93.189.58",
-  //     ip_version: "4",
-  //     asn: "AS14061",
-  //     geo_location: {
-  //       city: "North Bergen",
-  //       continent: "North America",
-  //       country: "United States",
-  //       iso_code: "US",
-  //       latitude: 40.8054,
-  //       longitude: -74.0241,
-  //       subdivision: "New Jersey",
-  //     },
-  //     // malicous_crefs: null,
-  //     schema_version: 1,
-  //     country_code: "US",
-  //   });
-  // }, 500);
-
   useEffect(() => {
     dispatch(fetchNetflowThunk({}));
   }, []);
@@ -85,7 +59,7 @@ const UserPage = ({ className }: Props): ReactNode => {
       setTableHeight(tableRef.current.offsetHeight);
     }
   }, [fetchData, showUserDetails]); // Re-measure on data load or visibility change
-  
+
   useEffect(() => {
     let tempFilters = { ...filters };
     if (tempFilters["country_code"]) {
@@ -128,9 +102,9 @@ const UserPage = ({ className }: Props): ReactNode => {
   }, [page, sort, searchKey, dateFrom, dateTo, filters]);
 
   return (
-    <div className={`${className} p-6`}>
+    <div className={`${className}`}>
       <UserPageSubNav
-        className={`mb-6`}
+        className={`mb-6 pt-2`}
         searchKey={searchKey}
         setFilters={setFilters}
         setSearchKey={setSearchKey}
@@ -142,13 +116,15 @@ const UserPage = ({ className }: Props): ReactNode => {
       />
       <div className={``}>
         {fetchLoading ? (
-          <BufferSVG className={`mx-auto mt-20 h-10 w-10 animate-spin`} />
+          <div className="h-screen flex justify-center items-start">
+            <BufferSVG className={`mx-auto mt-20 h-10 w-10 animate-spin`} />
+          </div>
         ) : (
           <></>
         )}
         {fetchSuccess && fetchData ? (
           <>
-            <div className={`flex items-stretch overflow-y-auto h-full gap-5`}>
+            <div className={`flex items-stretch overflow-y-auto h-full gap-5 px-3`}>
               <UserTable
                 className={`px-5 ${showUserDetails != null ? "w-3/5" : "w-full"
                   } transition-all duration-1000 ease-in-out`}
