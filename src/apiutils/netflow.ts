@@ -120,6 +120,22 @@ export const fetchDstPortKeys = async (token: string) => {
   });
 };
 
+export const fetchSrcServiceKeys = async (token: string) => {
+  return axios.get<string[]>(`${API_URL}/v1/get/src_service/keys`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const fetchDstServiceKeys = async (token: string) => {
+  return axios.get<string[]>(`${API_URL}/v1/get/dst_service/keys`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export const fetchSrcCountryKeys = async (token: string) => {
   return axios.get<string[]>(`${API_URL}/v1/get/src_country/keys`, {
     headers: {

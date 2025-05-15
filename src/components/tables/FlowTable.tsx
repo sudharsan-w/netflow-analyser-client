@@ -6,6 +6,7 @@ import { NetflowRecord } from "../../types/schema";
 import TableRow from "./TableRow";
 
 import CountryFlag from "../misc/CountryFlag";
+import { titleize } from "../../utils";
 
 type Props = {
   className?: String;
@@ -41,6 +42,7 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
   const header10 = useRef<HTMLDivElement>(null);
   const header11 = useRef<HTMLDivElement>(null);
   const header12 = useRef<HTMLDivElement>(null);
+  const header13 = useRef<HTMLDivElement>(null);
 
   return (
     <div className={`${className} font-sans`}>
@@ -67,7 +69,17 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
             />
           </div>
         </div>
-        <div className="flex-[15] px-4 py-3  " ref={header4}>
+        <div className="flex-[5] px-4 py-3  " ref={header4}>
+          <div className="flex justify-start items-start text-sm">
+            <span className={``}>Source Service</span>
+            <SortSVG
+              className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
+              onClick={handleSort("src_service")}
+              key={`src_service`}
+            />
+          </div>
+        </div>
+        <div className="flex-[15] px-4 py-3  " ref={header5}>
           <div className="flex justify-start items-start text-sm">
             <span className={``}>Destination Address</span>
             <SortSVG
@@ -77,7 +89,7 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
             />
           </div>
         </div>
-        <div className="flex-[5] px-4 py-3  " ref={header5}>
+        <div className="flex-[5] px-4 py-3  " ref={header6}>
           <div className="flex justify-start items-start text-sm">
             <span className={``}>Destination Port</span>
             <SortSVG
@@ -87,17 +99,27 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
             />
           </div>
         </div>
-        <div className="flex-[5] px-4 py-3  " ref={header6}>
+        <div className="flex-[5] px-4 py-3  " ref={header7}>
+          <div className="flex justify-start items-start text-sm">
+            <span className={``}>Destination Service</span>
+            <SortSVG
+              className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
+              onClick={handleSort("dst_service")}
+              key={`dst_service`}
+            />
+          </div>
+        </div>
+        <div className="flex-[5] px-4 py-3  " ref={header8}>
           <div className="flex justify-start items-start text-sm">
             <span className={``}>Flow Size</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
-              onClick={handleSort("flow_duration")}
-              key={`flow_duration`}
+              onClick={handleSort("flow_size")}
+              key={`flow_size`}
             />
           </div>
         </div>
-        <div className="flex-[10] px-4 py-3  " ref={header7}>
+        <div className="flex-[10] px-4 py-3  " ref={header9}>
           <div className="flex justify-start items-start text-sm">
             <span className={``}>Flow Duration</span>
             <SortSVG
@@ -107,7 +129,7 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
             />
           </div>
         </div>
-        <div className="flex-[10] px-4 py-3  " ref={header8}>
+        <div className="flex-[10] px-4 py-3  " ref={header10}>
           <div className="flex justify-start items-start text-sm">
             <span className={``}>Protocol</span>
             <SortSVG
@@ -117,17 +139,17 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
             />
           </div>
         </div>
-        <div className="flex-[5] px-4 py-3  " ref={header9}>
+        <div className="flex-[5] px-4 py-3  " ref={header11}>
           <div className="flex justify-start items-start text-sm">
             <span className={``}>IP Version</span>
             <SortSVG
               className={`cursor-pointer mt-1 h-3 w-8 fill-black`}
-              onClick={handleSort("protocol")}
-              key={`protocol`}
+              onClick={handleSort("ip_version")}
+              key={`ip_version`}
             />
           </div>
         </div>
-        <div className="flex-[15] px-4 py-3  " ref={header11}>
+        <div className="flex-[15] px-4 py-3  " ref={header12}>
           <div className="flex justify-start items-start text-sm">
             <span className={``}>Start Time {'(IST)'}</span>
             <SortSVG
@@ -137,7 +159,7 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
             />
           </div>
         </div>
-        <div className="flex-[15] px-4 py-3  " ref={header12}>
+        <div className="flex-[15] px-4 py-3  " ref={header13}>
           <div className="flex justify-start items-start text-sm">
             <span className={``}>End Time {'(IST)'}</span>
             <SortSVG
@@ -169,6 +191,9 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
                 <div className="w-full truncate    py-4">{record.src_port}</div>
               </TableRow>
               <TableRow referenceRef={header4} className={`inline-block  `}>
+                <div className="w-full truncate    py-4">{titleize(record.src_service)}</div>
+              </TableRow>
+              <TableRow referenceRef={header5} className={`inline-block  `}>
                 <div className="w-full truncate    py-4">
                   {record.dst_addr}
                   {record.dst_country_code && (
@@ -181,25 +206,28 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
                   )}
                 </div>
               </TableRow>
-              <TableRow referenceRef={header5} className={`inline-block  `}>
+              <TableRow referenceRef={header6} className={`inline-block  `}>
                 <div className="w-full truncate    py-4">{record.dst_port}</div>
               </TableRow>
-              <TableRow referenceRef={header6} className={`inline-block  `}>
+              <TableRow referenceRef={header7} className={`inline-block  `}>
+                <div className="w-full truncate    py-4">{titleize(record.dst_service)}</div>
+              </TableRow>
+              <TableRow referenceRef={header8} className={`inline-block  `}>
                 <div className="w-full truncate    py-4">
                   {record.flow_size}{" "}
                   <span className={`text-gray-500`}>{"bytes"}</span>
                 </div>
               </TableRow>
-              <TableRow referenceRef={header7} className={`inline-block  `}>
+              <TableRow referenceRef={header9} className={`inline-block  `}>
                 <div className="w-full truncate    py-4">
                   {record.flow_duration}{" "}
                   <span className={`text-gray-500`}>{"ms"}</span>
                 </div>
               </TableRow>
-              <TableRow referenceRef={header8} className={`inline-block  `}>
+              <TableRow referenceRef={header10} className={`inline-block  `}>
                 <div className="w-full truncate    py-4">{record.protocol}</div>
               </TableRow>
-              <TableRow referenceRef={header9} className={`inline-block  `}>
+              <TableRow referenceRef={header11} className={`inline-block  `}>
                 <div className="w-full truncate    py-4">
                   <span
                     className={`bg-pri-250 px-2 py-1 rounded-2xl text-black font bold`}
@@ -208,12 +236,12 @@ const FlowTable = ({ className, setSort, sort, data }: Props): ReactNode => {
                   </span>
                 </div>
               </TableRow>
-              <TableRow referenceRef={header11} className={`inline-block  `}>
+              <TableRow referenceRef={header12} className={`inline-block  `}>
                 <div className="w-full truncate    py-4">
                   {record.first_datetime.slice(0, 19).replace("T", ", ")}
                 </div>
               </TableRow>
-              <TableRow referenceRef={header12} className={`inline-block  `}>
+              <TableRow referenceRef={header13} className={`inline-block  `}>
                 <div className="w-full truncate    py-4">
                   {record.last_datetime.slice(0, 19).replace("T", ", ")}
                 </div>

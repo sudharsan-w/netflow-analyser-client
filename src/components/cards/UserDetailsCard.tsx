@@ -65,7 +65,21 @@ const TimeRangeMeta: {
   },
 };
 
-const handleTimeRanges = (tr: TimeRange): [Date | null, Date | null, TimeGranularity] => {
+function formatLocalISO(date: Date | null) {
+  if (!date) return date;
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0"); // Months start at 0
+  const dd = String(date.getDate()).padStart(2, "0");
+  const hh = String(date.getHours()).padStart(2, "0");
+  const min = String(date.getMinutes()).padStart(2, "0");
+  const ss = String(date.getSeconds()).padStart(2, "0");
+
+  return `${yyyy}-${mm}-${dd}T${hh}:${min}:${ss}`;
+}
+
+const handleTimeRanges = (
+  tr: TimeRange
+): [Date | null, Date | null, TimeGranularity] => {
   let curr_dt = new Date();
   let st_date: Date | null = null,
     en_date: Date | null = null;
@@ -140,8 +154,8 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
           ...fetchprotodist.query,
           params: {
             ...fetchprotodist.query.params,
-            date_from: stDate?.toISOString().slice(0, 19),
-            date_to: enDate?.toISOString().slice(0, 19),
+            date_from: formatLocalISO(stDate)?.slice(0, 19),
+            date_to: formatLocalISO(enDate)?.slice(0, 19),
           },
           body: {
             ...fetchprotodist.query.body,
@@ -166,8 +180,8 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
           params: {
             ...fetchflowdist.query.params,
             granularity: granularity,
-            date_from: stDate?.toISOString().slice(0, 19),
-            date_to: enDate?.toISOString().slice(0, 19),
+            date_from: formatLocalISO(stDate)?.slice(0, 19),
+            date_to: formatLocalISO(enDate)?.slice(0, 19),
           },
           body: {
             ...fetchflowdist.query.body,
@@ -339,7 +353,7 @@ const UserDetailsCard = ({ data, setData, className }: Props): ReactNode => {
               setSelectedOption={setFlowTimeRange}
             />
           </div>
-          {fetchLoading ? (
+          {flowFetchLoading ? (
             <BufferSVG className={`mx-auto w-10 animate-spin`} />
           ) : (
             <div className={`flex w-full h-80 `}>

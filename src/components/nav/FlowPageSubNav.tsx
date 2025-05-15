@@ -16,6 +16,8 @@ import {
   fetchProtocolKeys,
   fetchSrcCountryKeys,
   fetchDstCountryKeys,
+  fetchSrcServiceKeys,
+  fetchDstServiceKeys,
 } from "../../apiutils/netflow.ts";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux_store/store.ts";
@@ -49,6 +51,8 @@ const FlowPageSubNav = ({
   const [protocolKeys, setProtocolKeys] = useState<string[]>([]);
   const [srcPortKeys, setSrcPortKeys] = useState<string[]>([]);
   const [dstPortKeys, setDstPortKeys] = useState<string[]>([]);
+  const [srcServiceKeys, setSrcServiceKeys] = useState<string[]>([]);
+  const [dstServiceKeys, setDstServiceKeys] = useState<string[]>([]);
   const [srcCountryKeys, setSrcCountryKeys] = useState<string[]>([]);
   const [dstCountryKeys, setDstCountryKeys] = useState<string[]>([]);
 
@@ -101,6 +105,12 @@ const FlowPageSubNav = ({
       .catch(console.debug);
     fetchDstCountryKeys(token ?? "")
       .then((resp) => setDstCountryKeys(resp.data.map(getCountryName)))
+      .catch(console.debug);
+    fetchSrcServiceKeys(token ?? "")
+      .then((resp) => setSrcServiceKeys(resp.data))
+      .catch(console.debug);
+    fetchDstServiceKeys(token ?? "")
+      .then((resp) => setDstServiceKeys(resp.data))
       .catch(console.debug);
   }, []);
 
@@ -157,6 +167,28 @@ const FlowPageSubNav = ({
                   allDataPossibleOptions={dstPortKeys}
                   setHandler={handleFilters("dst_port")}
                   valueHandler={filters["dst_port"] ?? []}
+                />
+              </div>
+              <div className={`mb-4`}>
+                <span className={`text-md font-bold mb-1`}>
+                  Source Service
+                </span>
+                <DynamicInputSearch
+                  placeholder="Source Service"
+                  allDataPossibleOptions={srcServiceKeys}
+                  setHandler={handleFilters("src_service")}
+                  valueHandler={filters["src_service"] ?? []}
+                />
+              </div>
+              <div className={`mb-4`}>
+                <span className={`text-md font-bold mb-1`}>
+                  Destination Service
+                </span>
+                <DynamicInputSearch
+                  placeholder="Dest Service"
+                  allDataPossibleOptions={dstServiceKeys}
+                  setHandler={handleFilters("dst_service")}
+                  valueHandler={filters["dst_service"] ?? []}
                 />
               </div>
               <div className={`mb-4`}>

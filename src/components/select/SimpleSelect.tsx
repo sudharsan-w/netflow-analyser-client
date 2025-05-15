@@ -19,7 +19,7 @@ const SimpleSelect = ({
 }: Props): ReactNode => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(event.target.value);
-    console.log("Selected:", event.target.value);
+    console.debug("Selected:", event.target.value);
   };
 
   return (

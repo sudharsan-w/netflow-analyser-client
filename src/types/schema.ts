@@ -26,6 +26,8 @@ export const NetflowRecordSchema = z.object({
   dst_addr: z.string(),
   src_port: z.string().optional(),
   dst_port: z.string().optional(),
+  src_service: z.string().optional(),
+  dst_service: z.string().optional(),
 
   first_datetime: z.string(),
   last_datetime: z.string(),
